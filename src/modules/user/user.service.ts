@@ -32,7 +32,10 @@ export class UserService extends BaseApiService<UserModel> {
   public async createUser(user: CreateUserDto): Promise<UserModel> {
     const password = this._generateHashPassword(user.password);
     user.password = password;
-    user.avatar = `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+    user.avatar = `https://base-nest.vercel.app/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+    if (AppConfig.getInstance().app.product == 'dev') {
+      user.avatar = `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+    }
     return (await this._model.create(user)).populate('role', 'name');
   }
 
@@ -48,10 +51,14 @@ export class UserService extends BaseApiService<UserModel> {
     if (documentCount === 0) {
       for (const item of Object.values(RoleConstant.LIST_ROLES)) {
         const role = await this._roleService.findOneByField({ name: item });
+        let avatar = `https://base-nest.vercel.app/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+        if (AppConfig.getInstance().app.product == 'dev') {
+          avatar = `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+        }
         const newDocument: CreateUserDto = {
           email: item + '@gmail.com',
           fullName: item,
-          avatar: `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`,
+          avatar: avatar,
           password: item,
           role: role._id,
           username: item,

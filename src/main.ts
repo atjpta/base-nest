@@ -22,11 +22,7 @@ async function bootstrap() {
 
   await app.listen(PORT, async () => {
     const url = await app.getUrl();
-    if (AppConfig.getInstance().app.product == 'dev') {
-      AppConfig.urlServer = url;
-    } else {
-      AppConfig.urlServer = 'https://base-nest.vercel.app';
-    }
+    AppConfig.urlServer = url;
     console.log(`Application is running, see document on: ${url}/docs`);
   });
 }
