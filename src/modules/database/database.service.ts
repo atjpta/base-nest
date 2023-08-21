@@ -29,13 +29,13 @@ export class DatabaseService {
     const resData: ResDelete[] = [];
     for (const collectionName of DatabasesConstant.COLLECTIONS_NAME) {
       switch (collectionName) {
-        case FileConstant.FOLDER:
-          const countFile = await this.fileService.deleteAll();
-          resData.push({
-            collectionName: FileConstant.FOLDER,
-            deletedCount: countFile,
-          });
-          break;
+        // case FileConstant.FOLDER:
+        //   const countFile = await this.fileService.deleteAll();
+        //   resData.push({
+        //     collectionName: FileConstant.FOLDER,
+        //     deletedCount: countFile,
+        //   });
+        //   break;
 
         case ImageConstant.BUCKETS:
           const countImage = await this.imageService.DeleteAll();
@@ -68,12 +68,12 @@ export class DatabaseService {
   }
   public async dropCollection(collectionName: string): Promise<ResDelete> {
     switch (collectionName) {
-      case FileConstant.FOLDER:
-        const countFile = await this.fileService.deleteAll();
-        return {
-          collectionName: FileConstant.FOLDER,
-          deletedCount: countFile,
-        };
+      // case FileConstant.FOLDER:
+      //   const countFile = await this.fileService.deleteAll();
+      //   return {
+      //     collectionName: FileConstant.FOLDER,
+      //     deletedCount: countFile,
+      //   };
 
       case ImageConstant.BUCKETS:
         const countImage = await this.imageService.DeleteAll();

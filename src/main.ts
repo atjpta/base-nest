@@ -21,7 +21,7 @@ async function bootstrap() {
   const PORT = AppConfig.getInstance().app.port || 3600;
 
   await app.listen(PORT, async () => {
-    const url = await app.getUrl();
+    const url = (await app.getUrl()) || 'https://base-nest.vercel.app';
     AppConfig.urlServer = url;
     console.log(`Application is running, see document on: ${url}/docs`);
   });
