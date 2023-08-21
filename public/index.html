@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Let's go!</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.5.0/dist/full.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="shortcut icon" href="./assets/imgs/favicon.ico" type="image/x-icon" />
+  <!-- Icon: Font Awesome  -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Google Font  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <!-- DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.0/dist/full.css" rel="stylesheet" type="text/css" />
+  <!-- Tailwind CSS  -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    /* custom class  */
+      @layer utilities {
+        .text-danger {
+          color: red;
+          font-weight: bold;
+        }
+      }
+    </style>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"
+    integrity="sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs"
+    crossorigin="anonymous"></script>
+  <script defer src="./tailwind.config.js"></script>
+  <!-- Custom Style  -->
+  <link rel="stylesheet" href="/css/style.css" />
+  <!-- Javascript  -->
+  <script defer src="/js/script.js"></script>
+</head>
+
+<body
+  class="scroll-smooth w-[100vw] h-[100vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-300">
+  <div class="container">
+    <div id="topPage" class="header">
+    </div>
+    <div class="main">
+      <div class="sidebar"></div>
+      <div class="content text-center w-screen h-screen ">
+
+        <div class="py-20 pr-10  w-fit mx-auto">
+          <!-- logo -->
+          <div class="scale-125  btn btn-ghost bg-transparent hover:bg-transparent font-bold indicator">
+            <div
+              class=" w-20 h-9 duration-500 ring-4 ring-green-300/30 -skew-x-12 -skew-y-6 rounded-tl-full rounded-br-full bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400">
+            </div>
+            <div class="indicator-item top-1/2 right-1/2 translate-x-1/2">
+              <div
+                class="animate-ping w-8 h-8 ring-4 ring-green-300/30 rounded-full bg-gradient-to-r from-green-400 via-cyan-400 to-blue-400">
+              </div>
+            </div>
+
+            <div class="indicator-item top-1/2 right-1/2 translate-x-1/2">
+              <OtherVIcon class-icon=" " icon="fa-solid fa-compact-disc" />
+              <div class=" animate-spin text-3xl">
+                <svg xmlns="http://www.w3.org/2000/svg" height="1em"
+                  viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                  <style>
+                    svg {
+                      fill: #ff0000
+                    }
+                  </style>
+                  <path
+                    d="M0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 32a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm-96-32a96 96 0 1 0 192 0 96 96 0 1 0 -192 0zM96 240c0-35 17.5-71.1 45.2-98.8S205 96 240 96c8.8 0 16-7.2 16-16s-7.2-16-16-16c-45.4 0-89.2 22.3-121.5 54.5S64 194.6 64 240c0 8.8 7.2 16 16 16s16-7.2 16-16z" />
+                </svg>
+              </div>
+            </div>
+            <div
+              class="text-white font-extrabold px-3 indicator-item top-1/2 right-1/2 translate-x-1/2 -skew-x-12 -skew-y-6">
+              NestJS
+            </div>
+          </div>
+        </div>
+
+        <a href="/docs" class="btn bg-base-100/0 active:bg-base-100/0 hover:bg-base-100/0 border-0">
+          <span
+            class="italic before:h-[98%] before:my-auto py-1 before:block before:absolute before:-inset-1 before:-skew-y-3 before:-skew-x-12 before:bg-gradient-to-r before:from-green-400 before:via-cyan-400 before:to-blue-400 bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 relative inline-block">
+            <span class="relative text-white text-3xl font-black px-5">let's go document API</span>
+          </span>
+        </a>
+
+
+      </div>
+    </div>
+  </div>
+  </div>
+  <div id="goTop"></div>
+</body>
+
+</html>
