@@ -43,7 +43,6 @@ export class UserController {
       return BaseResponse.badRequest(RoleConstant.MODEL_NAME);
     }
     body.role = role._id;
-
     //create user
     const records = await this._modelService.create(body);
     return BaseResponse.success({

@@ -21,9 +21,9 @@ async function bootstrap() {
   const PORT = AppConfig.getInstance().app.port || 3600;
 
   await app.listen(PORT, async () => {
-    console.log(
-      `Application is running, see document on: ${await app.getUrl()}/docs`,
-    );
+    const url = await app.getUrl();
+    AppConfig.urlServer = url;
+    console.log(`Application is running, see document on: ${url}/docs`);
   });
 }
 bootstrap();

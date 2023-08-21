@@ -10,6 +10,13 @@ export class RegisterDto {
   username: string;
 
   @IsString()
+  @ApiProperty({
+    example: 'fullName',
+    description: 'The fullName of the user',
+  })
+  fullName: string;
+
+  @IsString()
   @IsEmail()
   @ApiProperty({
     example: 'aa@gmail.com',

@@ -9,6 +9,7 @@ import { AppConfig } from 'src/configs/app.config';
 import { CreateUserDto } from './dto/create-user.dto';
 import { RoleConstant } from '../role/constant/role.constant';
 import { RoleService } from '../role/role.service';
+import { FileConstant } from '../file/constant/file.constant';
 
 @Injectable()
 export class UserService extends BaseApiService<UserModel> {
@@ -31,6 +32,7 @@ export class UserService extends BaseApiService<UserModel> {
   public async createUser(user: CreateUserDto): Promise<UserModel> {
     const password = this._generateHashPassword(user.password);
     user.password = password;
+    user.avatar = `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`;
     return (await this._model.create(user)).populate('role', 'name');
   }
 
@@ -48,6 +50,8 @@ export class UserService extends BaseApiService<UserModel> {
         const role = await this._roleService.findOneByField({ name: item });
         const newDocument: CreateUserDto = {
           email: item + '@gmail.com',
+          fullName: item,
+          avatar: `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`,
           password: item,
           role: role._id,
           username: item,

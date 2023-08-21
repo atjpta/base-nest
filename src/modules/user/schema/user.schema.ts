@@ -21,6 +21,16 @@ export class UserModel extends BaseMongoDbSchema {
   @Prop({
     type: String,
   })
+  avatar: string;
+
+  @Prop({
+    type: String,
+  })
+  fullName: string;
+
+  @Prop({
+    type: String,
+  })
   email: string;
 
   @Prop({
@@ -37,7 +47,7 @@ export class UserModel extends BaseMongoDbSchema {
 
   @Prop({
     required: false,
-    type: Boolean,
+    type: String,
     default: () => new Date().toISOString(),
   })
   lastTimeOnline?: string;

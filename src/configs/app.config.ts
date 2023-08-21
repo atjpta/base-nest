@@ -38,7 +38,7 @@ export interface IAppConfig {
 export class AppConfig {
   private static configService: ConfigService;
   private static instance: AppConfig;
-
+  public static urlServer: string;
   private constructor() {
     //..
   }
