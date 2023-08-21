@@ -21,8 +21,12 @@ async function bootstrap() {
   const PORT = AppConfig.getInstance().app.port || 3600;
 
   await app.listen(PORT, async () => {
-    const url = (await app.getUrl()) || 'https://base-nest.vercel.app';
-    AppConfig.urlServer = url;
+    const url = await app.getUrl();
+    if (AppConfig.getInstance().app.product == 'dev') {
+      AppConfig.urlServer = url;
+    } else {
+      AppConfig.urlServer = 'https://base-nest.vercel.app';
+    }
     console.log(`Application is running, see document on: ${url}/docs`);
   });
 }
