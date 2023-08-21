@@ -35,6 +35,13 @@ export interface IAppConfig {
   product: string;
 }
 
+export interface IMailConfig {
+  host: string;
+  user: string;
+  password: string;
+  from: string;
+}
+
 export class AppConfig {
   private static configService: ConfigService;
   private static instance: AppConfig;
@@ -122,6 +129,14 @@ export class AppConfig {
       port: AppConfig.configService.get<number>('REDIS_PORT') ?? 6379,
       ttl: AppConfig.configService.get<number>('REDIS_TTL') ?? 10,
       db: AppConfig.configService.get<number>('REDIS_DB') ?? 0,
+    };
+  }
+  get mail(): IMailConfig {
+    return {
+      host: AppConfig.configService.get<string>('MAIL_HOST'),
+      from: AppConfig.configService.get<string>('MAIL_FROM'),
+      password: AppConfig.configService.get<string>('MAIL_PASSWORD'),
+      user: AppConfig.configService.get<string>('MAIL_USER'),
     };
   }
 }

@@ -9,6 +9,8 @@ import { IHttpSuccess, BaseResponse } from 'src/base/response';
 import { UserService } from '../user/user.service';
 import { UserConstant } from '../user/constant/user.constant';
 import { IsPublic } from './decorators/public.decorator';
+import { MailerService } from '@nestjs-modules/mailer';
+
 @IsPublic()
 @ApiTags(AuthConstant.SWAGGER_TAG)
 @Controller({ path: AuthConstant.API_PREFIX })
@@ -16,6 +18,7 @@ export class AuthController {
   constructor(
     private readonly _modelService: AuthService,
     private readonly _userService: UserService,
+    private readonly mailerService: MailerService,
   ) {}
 
   // ========== API POST ==========
@@ -42,12 +45,12 @@ export class AuthController {
         `${UserConstant.MODEL_NAME}: Password Failed`,
       );
     }
-    const result = await this._modelService.login(user);
+    const records = await this._modelService.login(user);
 
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: 'login',
-      data: result,
+      data: records,
     });
   }
 
@@ -58,6 +61,16 @@ export class AuthController {
   ): Promise<IHttpSuccess | HttpException> {
     //create user
     const records = await this._modelService.register(body);
+
+    this.mailerService.sendMail({
+      to: records.email,
+      from: 'noreply@nestjs.com',
+      subject: 'welcome to website',
+      template: 'welcome',
+      context: {
+        name: records.fullName,
+      },
+    });
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: 'register',

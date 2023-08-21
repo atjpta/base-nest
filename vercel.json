@@ -8,7 +8,11 @@
         "JWT_REFRESH_TOKEN_SECRET": "nest-base-server",
         "JWT_ACCESS_TOKEN_EXPIRATION_TIME": "86400",
         "JWT_REFRESH_TOKEN_EXPIRATION_TIME": "86400",
-        "SALT_ROUND": "10"
+        "SALT_ROUND": "10",
+        "MAIL_HOST": "smtp.gmail.com",
+        "MAIL_USER": "an.sensornotes@gmail.com",
+        "MAIL_PASSWORD": "voxhvhznduhwmjas",
+        "MAIL_FROM": "${MAIL_USER}"
     },
     "builds": [
         {
