@@ -64,6 +64,9 @@ npm run start:dev or npm run dev
 - các chức năng hiện có của hệ thống
 
   - hệ thống đăng nhập qua username và password cùng với phân quyền và xác thực của JWT.
+  - user có ảnh avatar mặc định
+  - dịch vụ gửi mail (nên để chạy ngầm cho đỡ tốn công chờ)
+  - dùng cache để giảm thiểu request tới db
   - upload/download file lên thẳng thư mục của hệ thống
   - upload/download file lên mongodb
 
@@ -71,6 +74,7 @@ npm run start:dev or npm run dev
   - thêm phần websocket (có thể tạo ra brach or fork ra git mới để xây dựng)
     - chat 1:1, chat group
     - thông báo
+  - gửi otp để xác thực khi đổi mk
 
 ## Note
 
