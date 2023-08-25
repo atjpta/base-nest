@@ -62,7 +62,7 @@ export class AuthController {
     //create user
     const records = await this._modelService.register(body);
 
-    await this.mailerService.sendMail({
+    this.mailerService.sendMail({
       to: records.email,
       from: 'noreply@nestjs.com',
       subject: 'welcome to website',
