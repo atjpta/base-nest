@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 
 export const corsOption = {
-  origin: '*', // allows all origins
+  origin: true, // allows all origins
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // allowed headers
   credentials: true, // enables sending cookies over CORS
