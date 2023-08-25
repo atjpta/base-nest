@@ -9,7 +9,6 @@ import { UserModule } from './user/user.module';
 import { FileModule } from './file/file.module';
 import { ImageModule } from './image/image.module';
 import { SongModule } from './song/song.module';
-import { SocketManagerModule } from './socket_manager/socket_manager.module';
 import { CacheRedisModule } from './cache-redis/cache-redis.module';
 import { MailModule } from './mail/mail.module';
 
@@ -23,7 +22,7 @@ export const APP_MODULES = [
   FileModule,
   ImageModule,
   SongModule,
-  SocketManagerModule,
+  // SocketManagerModule,
 ];
 
 export const APP_FILTERS = [BaseHttpExceptionFilter, MongoExceptionFilter];
