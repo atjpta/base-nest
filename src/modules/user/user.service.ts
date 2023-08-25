@@ -91,4 +91,12 @@ export class UserService extends BaseApiService<UserModel> {
     const isMatch = await bcrypt.compare(newPassword, hashPassword);
     return isMatch;
   }
+
+  public async getInfo(id: string): Promise<UserModel> {
+    const records = await this._model
+      .findById(this._getID(id))
+      .populate('role')
+      .select('-password');
+    return records;
+  }
 }

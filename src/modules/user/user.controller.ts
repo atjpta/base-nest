@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpException,
+  Param,
   Post,
   Put,
   Query,
@@ -19,6 +20,8 @@ import { RoleService } from '../role/role.service';
 import { RoleConstant } from '../role/constant/role.constant';
 import { GetUserId } from '../auth/decorators/user.decorator';
 import { HasRoles } from '../auth/decorators/role.decorator';
+import { IsPublic } from '../auth/decorators/public.decorator';
+import { ValidateMongoId } from 'src/shared/pipes/validate-mongoId.pipe';
 
 @ApiBearerAuth()
 @ApiTags(UserConstant.SWAGGER_TAG)
@@ -72,6 +75,24 @@ export class UserController {
     });
   }
 
+  @IsPublic()
+  @Get(':id')
+  @ApiOperation({
+    summary: `--- find One ${UserConstant.MODEL_NAME} by id ---`,
+  })
+  public async findOne(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getInfo(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: UserConstant.MODEL_NAME,
+      data: records,
+    });
+  }
+
+  // ========== API PUT ==========
+
   // @Put(``)
   // @ApiOperation({ summary: `--- update ${UserConstant.MODEL_NAME} by id ---` })
   // public async update(
@@ -85,8 +106,6 @@ export class UserController {
   //     data: records,
   //   });
   // }
-
-  // ========== API PUT ==========
 
   @Put(`password`)
   @ApiOperation({
