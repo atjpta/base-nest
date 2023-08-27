@@ -16,4 +16,16 @@ export class MailService {
       },
     });
   }
+
+  public async welComeAwait(mail: string, name: string) {
+    await this.mailerService.sendMail({
+      to: mail,
+      from: 'noreply@nestjs.com',
+      subject: 'welcome to website',
+      template: 'welcome',
+      context: {
+        name: name,
+      },
+    });
+  }
 }
