@@ -11,6 +11,8 @@ import { RoleConstant } from '../role/constant/role.constant';
 import { RoleService } from '../role/role.service';
 import { FileConstant } from '../file/constant/file.constant';
 
+const avatarUrl = `https://base-nest.vercel.app/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+
 @Injectable()
 export class UserService extends BaseApiService<UserModel> {
   constructor(
@@ -32,7 +34,7 @@ export class UserService extends BaseApiService<UserModel> {
   public async createUser(user: CreateUserDto): Promise<UserModel> {
     const password = this._generateHashPassword(user.password);
     user.password = password;
-    user.avatar = `https://base-nest.vercel.app/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+    user.avatar = avatarUrl;
     if (AppConfig.getInstance().app.product == 'dev') {
       user.avatar = `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`;
     }
@@ -51,7 +53,7 @@ export class UserService extends BaseApiService<UserModel> {
     if (documentCount === 0) {
       for (const item of Object.values(RoleConstant.LIST_ROLES)) {
         const role = await this._roleService.findOneByField({ name: item });
-        let avatar = `https://base-nest.vercel.app/${FileConstant.API_PREFIX}/eye Ai.jpg`;
+        let avatar = avatarUrl;
         if (AppConfig.getInstance().app.product == 'dev') {
           avatar = `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`;
         }

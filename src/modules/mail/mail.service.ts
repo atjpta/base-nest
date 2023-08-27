@@ -1,17 +1,19 @@
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
-import { Cache } from 'cache-manager';
-import { Inject, Injectable } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class MailService {
-  constructor(@Inject(CACHE_MANAGER) public readonly cacheManager: Cache) {}
-  public async get(key: string) {
-    const value = await this.cacheManager.store.get(key);
-    return value;
-  }
+  constructor(private readonly mailerService: MailerService) {}
 
-  public async set(key: string, value: string) {
-    await this.cacheManager.set(key, value);
-    return true;
+  public async welCome(mail: string, name: string) {
+    this.mailerService.sendMail({
+      to: mail,
+      from: 'noreply@nestjs.com',
+      subject: 'welcome to website',
+      template: 'welcome',
+      context: {
+        name: name,
+      },
+    });
   }
 }
