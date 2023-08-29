@@ -78,11 +78,10 @@ export class UserService extends BaseApiService<UserModel> {
     password: string,
   ): Promise<UserModel> {
     const newPassword = this._generateHashPassword(password);
-    const user = await this._model.findByIdAndUpdate(
-      id,
-      { password: newPassword },
-      { new: true },
-    );
+    const _id = this._getID(id);
+    const user = await this._model
+      .findByIdAndUpdate(_id, { password: newPassword }, { new: true })
+      .select('-password -role');
     return user;
   }
 

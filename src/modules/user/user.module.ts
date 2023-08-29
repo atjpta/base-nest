@@ -5,6 +5,8 @@ import { UserModel } from './schema/user.schema';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { RoleModule } from '../role/role.module';
+import { BullModule } from '@nestjs/bull';
+import { BullConstant } from '../bull/constant/bull.constant';
 
 @Module({
   imports: [
@@ -15,9 +17,12 @@ import { RoleModule } from '../role/role.module';
         schema: SchemaFactory.createForClass(UserModel),
       },
     ]),
+    BullModule.registerQueue({
+      name: BullConstant.JOB_BULL.sendEmail,
+    }),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, BullModule],
   exports: [UserService, RoleModule],
 })
 export class UserModule {}

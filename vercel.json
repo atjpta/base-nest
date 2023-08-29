@@ -6,13 +6,18 @@
         "DATABASE_URI": "mongodb+srv://admin:abc201199@cluster0.3crqh.mongodb.net/nestBase?retryWrites=true&w=majority",
         "JWT_ACCESS_TOKEN_SECRET": "nest-base-server",
         "JWT_REFRESH_TOKEN_SECRET": "nest-base-server",
-        "JWT_ACCESS_TOKEN_EXPIRATION_TIME": "86400",
-        "JWT_REFRESH_TOKEN_EXPIRATION_TIME": "86400",
+        "JWT_ACCESS_TOKEN_EXPIRATION_TIME": "2592000",
+        "JWT_REFRESH_TOKEN_EXPIRATION_TIME": "2592000",
         "SALT_ROUND": "10",
         "MAIL_HOST": "smtp.gmail.com",
         "MAIL_USER": "an.sensornotes@gmail.com",
         "MAIL_PASSWORD": "voxhvhznduhwmjas",
-        "MAIL_FROM": "${MAIL_USER}"
+        "MAIL_FROM": "${MAIL_USER}",
+        "REDIS_HOST": "redis-17783.c16.us-east-1-2.ec2.cloud.redislabs.com",
+        "REDIS_PORT": "17783",
+        "REDIS_TTL": "10",
+        "REDIS_DB": "0",
+        "REDIS_PASSWORD": "rQjrY34IdKbKejPx4QBECMVG094GAgSQ"
     },
     "builds": [
         {

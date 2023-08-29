@@ -13,6 +13,7 @@ export interface IRedis {
   port: number;
   ttl: number;
   db: number;
+  password: string;
 }
 
 export interface IDatabaseConfig {
@@ -129,6 +130,7 @@ export class AppConfig {
       port: AppConfig.configService.get<number>('REDIS_PORT') ?? 6379,
       ttl: AppConfig.configService.get<number>('REDIS_TTL') ?? 10,
       db: AppConfig.configService.get<number>('REDIS_DB') ?? 0,
+      password: AppConfig.configService.get<string>('REDIS_PASSWORD') ?? '',
     };
   }
   get mail(): IMailConfig {

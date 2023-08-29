@@ -11,9 +11,11 @@ import { ImageModule } from './image/image.module';
 import { SongModule } from './song/song.module';
 import { CacheRedisModule } from './cache-redis/cache-redis.module';
 import { MailModule } from './mail/mail.module';
+import { BullRedisModule } from './bull/bull.module';
 
 export const APP_MODULES = [
   DatabaseModule,
+  BullRedisModule,
   MailModule,
   CacheRedisModule,
   UserModule,

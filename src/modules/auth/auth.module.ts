@@ -4,7 +4,8 @@ import { AuthService } from './auth.service';
 import { UserModule } from '../user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AppConfig } from 'src/configs/app.config';
-
+import { BullModule } from '@nestjs/bull';
+import { BullConstant } from '../bull/constant/bull.constant';
 @Module({
   imports: [
     UserModule,
@@ -24,9 +25,12 @@ import { AppConfig } from 'src/configs/app.config';
       },
       inject: [],
     }),
+    BullModule.registerQueue({
+      name: BullConstant.JOB_BULL.sendEmail,
+    }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, BullModule],
   exports: [AuthService, UserModule],
 })
 export class AuthModule {}

@@ -45,3 +45,26 @@ export class CreateUserDto {
   })
   password: string;
 }
+
+export class createNewPassword {
+  @IsString()
+  @ApiProperty({
+    example: 'user2',
+    description: 'username of user',
+  })
+  username: string;
+
+  @IsString()
+  @ApiProperty({
+    example: 'code',
+    description: 'code rePassword',
+  })
+  code: string;
+
+  @IsString()
+  @ApiProperty({
+    example: 'NewPassword',
+    description: 'NewPassword of user',
+  })
+  newPassword: string;
+}

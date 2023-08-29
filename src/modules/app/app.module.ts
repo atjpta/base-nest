@@ -7,6 +7,8 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { APP_FILTERS, APP_GUARDS, APP_MODULES } from '../';
+import { BullModule } from '@nestjs/bull';
+import { AppConfig } from 'src/configs/app.config';
 
 @Module({
   imports: [
@@ -16,6 +18,15 @@ import { APP_FILTERS, APP_GUARDS, APP_MODULES } from '../';
     ConfigModule.forRoot({
       envFilePath: ['.env', '.development.env'], // https://docs.nestjs.com/techniques/configuration
       isGlobal: true,
+    }),
+    BullModule.forRootAsync({
+      useFactory: () => ({
+        redis: {
+          host: AppConfig.getInstance().redis.host,
+          port: AppConfig.getInstance().redis.port,
+          password: AppConfig.getInstance().redis.password,
+        },
+      }),
     }),
     ...APP_MODULES,
   ],

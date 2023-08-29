@@ -29,21 +29,6 @@ export class MailController {
     });
   }
 
-  @Post('await')
-  @ApiOperation({
-    summary: `--- Create ${MailConstant.SWAGGER_TAG} with await ---`,
-  })
-  public async createAwait(
-    @Body() body: createMailDto,
-  ): Promise<IHttpSuccess | HttpException> {
-    await this._modelService.welComeAwait(body.mail, body.name);
-    return BaseResponse.success({
-      statusCode: BaseHttpStatus.OK,
-      object: MailConstant.SWAGGER_TAG,
-      data: true,
-    });
-  }
-
   // ========== API GET ==========
 
   // ========== API PUT ==========

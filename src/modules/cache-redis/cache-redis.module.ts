@@ -21,6 +21,7 @@ import { AppConfig } from 'src/configs/app.config';
             },
             database: AppConfig.getInstance().redis.db,
             ttl: AppConfig.getInstance().redis.ttl,
+            password: AppConfig.getInstance().redis.password,
           });
           console.log(`Connected to redis!`);
         } catch (error) {
@@ -43,7 +44,6 @@ import { AppConfig } from 'src/configs/app.config';
   controllers: [CacheRedisController],
   providers: [
     CacheRedisService,
-
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: CacheInterceptor, // auto cache response

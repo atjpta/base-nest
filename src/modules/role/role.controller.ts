@@ -16,7 +16,7 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { BaseHttpStatus } from 'src/base/http-status';
 import { QueryFindAll } from 'src/base/query-dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
-import { ValidateMongoId } from 'src/shared/pipes/validate-mongoId.pipe';
+import { ValidateMongoId } from 'src/shared/pipes/validate.pipe';
 import { HasRoles } from '../auth/decorators/role.decorator';
 
 @ApiBearerAuth()
