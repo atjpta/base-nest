@@ -3,10 +3,8 @@
  */
 
 export class AppMixin {
-  static toArray = (data?): any[] => {
+  static toArray = (data?: any): any[] => {
     let resData: any[] = [];
-
-    console.log();
 
     if (!data) {
       resData = [];
