@@ -49,7 +49,7 @@ export class ImageController {
       statusCode: BaseHttpStatus.OK,
       data: {
         urlImage: [
-          `${AppConfig.urlServer || req.headers.host}/${
+          `${AppConfig.urlServer || ImageConstant.URL_API}/${
             ImageConstant.API_PREFIX
           }/${req.file.originalname}`,
         ],
@@ -74,7 +74,9 @@ export class ImageController {
     const urlImage = [];
     for (let i = 0; i < parseInt(`${req.files.length}`); i++) {
       urlImage.push(
-        `${req.headers.host}/${ImageConstant.API_PREFIX}/${req.files[i].originalname}`,
+        `${AppConfig.urlServer || ImageConstant.URL_API}/${
+          ImageConstant.API_PREFIX
+        }/${req.files[i].originalname}`,
       );
     }
 

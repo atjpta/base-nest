@@ -178,7 +178,7 @@ export class UserController {
     @Body() body: UpdateUserDto,
   ): Promise<IHttpSuccess | HttpException> {
     if (req.file) {
-      body.avatar = `${AppConfig.urlServer || req.headers.host}/${
+      body.avatar = `${AppConfig.urlServer || ImageConstant.URL_API}/${
         ImageConstant.API_PREFIX
       }/${req.file.originalname}`;
     }
