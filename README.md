@@ -32,7 +32,7 @@ npm run start:dev or npm run dev
 
 ## Truy cập Api Document
 
-- Swagger: http://localhost:3000/docs
+- Swagger: http://localhost:3600/docs
 
 ## Cấu trúc source code
 

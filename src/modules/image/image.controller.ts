@@ -25,7 +25,6 @@ import { BaseResponse, IHttpSuccess } from 'src/base/response';
 import { BaseHttpStatus } from 'src/base/http-status';
 import { QueryFindAll } from 'src/base/query-dto';
 import { CreateImageDto } from './dto/create-image.dto';
-import { AppConfig } from 'src/configs/app.config';
 
 @ApiBearerAuth()
 @ApiTags(ImageConstant.SWAGGER_TAG)
@@ -49,7 +48,7 @@ export class ImageController {
       statusCode: BaseHttpStatus.OK,
       data: {
         urlImage: [
-          `${AppConfig.urlServer}/${ImageConstant.API_PREFIX}/${req.file.originalname}`,
+          `${req.headers.origin}/${ImageConstant.API_PREFIX}/${req.file.originalname}`,
         ],
         ...req.file,
         body,
