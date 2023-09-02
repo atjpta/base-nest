@@ -8,15 +8,21 @@ import {
   Post,
   Put,
   Query,
+  Req,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserConstant } from './constant/user.constant';
 import { UserService } from './user.service';
 import { BaseResponse, IHttpSuccess } from 'src/base/response';
 import { CreateUserDto, createNewPassword } from './dto/create-user.dto';
 import { BaseHttpStatus } from 'src/base/http-status';
 import { QueryFindAll } from 'src/base/query-dto';
-import { UpdatePasswordDto } from './dto/update-user.dto';
+import { UpdatePasswordDto, UpdateUserDto } from './dto/update-user.dto';
 import { RoleService } from '../role/role.service';
 import { RoleConstant } from '../role/constant/role.constant';
 import { GetUserId } from '../auth/decorators/user.decorator';
@@ -28,7 +34,9 @@ import { Queue } from 'bull';
 import { BullConstant } from '../bull/constant/bull.constant';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-
+import { Request } from 'express';
+import { AppConfig } from 'src/configs/app.config';
+import { ImageConstant } from '../image/constant/image.constant';
 @ApiBearerAuth()
 @ApiTags(UserConstant.SWAGGER_TAG)
 @Controller({ path: UserConstant.API_PREFIX })
@@ -83,41 +91,6 @@ export class UserController {
       data: records,
     });
   }
-
-  // @IsPublic()
-  // @Get('get-code')
-  // @ApiOperation({
-  //   summary: `--- get code re password ---`,
-  // })
-  // public async GetCode(
-  //   @Query('email', ValidateEmail) email: string,
-  // ): Promise<IHttpSuccess | HttpException> {
-  //   const code1 = ~~(Math.random() * 10);
-  //   const code2 = ~~(Math.random() * 10);
-  //   const code3 = ~~(Math.random() * 10);
-  //   const code4 = ~~(Math.random() * 10);
-
-  //   const code = `${code1}${code2}${code3}${code4}`;
-  //   await this.cacheManager.set(code, true, { ttl: 125 } as any);
-  //   await this.sendMail.add(
-  //     BullConstant.TASK_BULL.registerMail,
-  //     {
-  //       to: email,
-  //       from: 'noreply@nestjs.com',
-  //       subject: 'code re password',
-  //       template: 'rePassword',
-  //       context: {
-  //         code: code,
-  //       },
-  //     },
-  //     { removeOnComplete: true },
-  //   );
-  //   return BaseResponse.success({
-  //     statusCode: BaseHttpStatus.OK,
-  //     object: UserConstant.MODEL_NAME,
-  //     data: true,
-  //   });
-  // }
 
   @IsPublic()
   @Get('check-code')
@@ -196,19 +169,24 @@ export class UserController {
 
   // ========== API PUT ==========
 
-  // @Put(``)
-  // @ApiOperation({ summary: `--- update ${UserConstant.MODEL_NAME} by id ---` })
-  // public async update(
-  //   @GetUser() user: IUser,
-  //   @Body() body: UpdateUserDto,
-  // ): Promise<IHttpSuccess | HttpException> {
-  //   const records = await this._modelService.update(user.id, body);
-  //   return BaseResponse.success({
-  //     statusCode: BaseHttpStatus.UPDATE,
-  //     object: UserConstant.MODEL_NAME,
-  //     data: records,
-  //   });
-  // }
+  @Put(``)
+  @ApiOperation({ summary: `--- update ${UserConstant.MODEL_NAME} ---` })
+  @ApiConsumes('multipart/form-data')
+  public async update(
+    @Req() req: Request,
+    @GetUserId() user_id: string,
+    @Body() body: UpdateUserDto,
+  ): Promise<IHttpSuccess | HttpException> {
+    if (req.file) {
+      body.avatar = `${AppConfig.urlServer}/${ImageConstant.API_PREFIX}/${req.file.originalname}`;
+    }
+    const records = await this._modelService.updateUser(user_id, body);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.UPDATE,
+      object: UserConstant.MODEL_NAME,
+      data: records,
+    });
+  }
 
   @Put(`password`)
   @ApiOperation({
@@ -244,8 +222,6 @@ export class UserController {
       id,
       body.newPassword,
     );
-    console.log(records);
-
     return BaseResponse.success({
       statusCode: BaseHttpStatus.UPDATE,
       object: UserConstant.MODEL_NAME,

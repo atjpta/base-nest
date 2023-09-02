@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { MongooseModule, SchemaFactory } from '@nestjs/mongoose';
 import { UserConstant } from './constant/user.constant';
 import { UserModel } from './schema/user.schema';
@@ -7,6 +7,7 @@ import { UserService } from './user.service';
 import { RoleModule } from '../role/role.module';
 import { BullModule } from '@nestjs/bull';
 import { BullConstant } from '../bull/constant/bull.constant';
+import { uploadOneImageMiddleware } from '../image/middleware/image.middleware';
 
 @Module({
   imports: [
@@ -25,4 +26,11 @@ import { BullConstant } from '../bull/constant/bull.constant';
   providers: [UserService, BullModule],
   exports: [UserService, RoleModule],
 })
-export class UserModule {}
+export class UserModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(uploadOneImageMiddleware).forRoutes({
+      path: `${UserConstant.API_PREFIX}`,
+      method: RequestMethod.PUT,
+    });
+  }
+}

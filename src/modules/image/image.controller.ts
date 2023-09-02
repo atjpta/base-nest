@@ -25,6 +25,7 @@ import { BaseResponse, IHttpSuccess } from 'src/base/response';
 import { BaseHttpStatus } from 'src/base/http-status';
 import { QueryFindAll } from 'src/base/query-dto';
 import { CreateImageDto } from './dto/create-image.dto';
+import { AppConfig } from 'src/configs/app.config';
 
 @ApiBearerAuth()
 @ApiTags(ImageConstant.SWAGGER_TAG)
@@ -48,7 +49,7 @@ export class ImageController {
       statusCode: BaseHttpStatus.OK,
       data: {
         urlImage: [
-          `${req.headers.host}/${ImageConstant.API_PREFIX}/${req.file.originalname}`,
+          `${AppConfig.urlServer}/${ImageConstant.API_PREFIX}/${req.file.originalname}`,
         ],
         ...req.file,
         body,
@@ -110,10 +111,7 @@ export class ImageController {
   async getFilesInfo(
     @Param('filename') filename: string,
     @Res() res: Response,
-    @Req() req: Request,
   ): Promise<IHttpSuccess> {
-    console.log(req.headers.host); //url của server
-
     const record = await this._modelService.findOneInfoFile(filename);
     if (record) {
       res.setHeader('Content-Type', 'image/jpeg');

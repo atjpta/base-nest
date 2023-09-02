@@ -10,6 +10,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { RoleConstant } from '../role/constant/role.constant';
 import { RoleService } from '../role/role.service';
 import { FileConstant } from '../file/constant/file.constant';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 const avatarUrl = `https://base-nest.vercel.app/${FileConstant.API_PREFIX}/eye Ai.jpg`;
 
@@ -98,6 +99,19 @@ export class UserService extends BaseApiService<UserModel> {
       .findById(this._getID(id))
       .populate('role')
       .select('-password');
+    return records;
+  }
+
+  public async updateUser(id: string, data: UpdateUserDto): Promise<UserModel> {
+    const _id = this._getID(id);
+
+    const records = await this._model
+      .findByIdAndUpdate(_id, data, {
+        new: true,
+      })
+      .populate('role')
+      .select('-password');
+
     return records;
   }
 }

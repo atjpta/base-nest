@@ -1,9 +1,26 @@
 import { PickType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { CreateFileMongoDBDto } from 'src/base/create-dto';
 
-export class UpdateUserDto extends CreateUserDto {}
+export class UpdateUserDto extends CreateFileMongoDBDto {
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description: 'fullName of user',
+  })
+  fullName: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description: 'avatar of user',
+  })
+  avatar?: string;
+}
 export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {
   @IsString()
   @ApiProperty({
