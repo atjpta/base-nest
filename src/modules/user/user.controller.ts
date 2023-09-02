@@ -35,6 +35,7 @@ import { BullConstant } from '../bull/constant/bull.constant';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Request } from 'express';
+import { AppConfig } from 'src/configs/app.config';
 import { ImageConstant } from '../image/constant/image.constant';
 @ApiBearerAuth()
 @ApiTags(UserConstant.SWAGGER_TAG)
@@ -177,7 +178,9 @@ export class UserController {
     @Body() body: UpdateUserDto,
   ): Promise<IHttpSuccess | HttpException> {
     if (req.file) {
-      body.avatar = `${req.headers.origin}/${ImageConstant.API_PREFIX}/${req.file.originalname}`;
+      body.avatar = `${AppConfig.urlServer || req.headers.host}/${
+        ImageConstant.API_PREFIX
+      }/${req.file.originalname}`;
     }
     const records = await this._modelService.updateUser(user_id, body);
     return BaseResponse.success({
