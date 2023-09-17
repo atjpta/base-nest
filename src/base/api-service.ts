@@ -61,7 +61,7 @@ export class BaseApiService<T> {
     return record;
   }
 
-  protected _getID(id: string): mongoose.Types.ObjectId | null {
+  public _getID(id: string): mongoose.Types.ObjectId | null {
     const objectId = mongoose.Types.ObjectId;
     const newID = new objectId(id) ?? null;
     return newID;

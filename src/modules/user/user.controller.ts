@@ -22,10 +22,14 @@ import { BaseResponse, IHttpSuccess } from 'src/base/response';
 import { CreateUserDto, createNewPassword } from './dto/create-user.dto';
 import { BaseHttpStatus } from 'src/base/http-status';
 import { QueryFindAll } from 'src/base/query-dto';
-import { UpdatePasswordDto, UpdateUserDto } from './dto/update-user.dto';
+import {
+  UpdatePasswordDto,
+  UpdateRoleUserDto,
+  UpdateUserDto,
+} from './dto/update-user.dto';
 import { RoleService } from '../role/role.service';
 import { RoleConstant } from '../role/constant/role.constant';
-import { GetUserId } from '../auth/decorators/user.decorator';
+import { GetUserId, GetUserRole } from '../auth/decorators/user.decorator';
 import { HasRoles } from '../auth/decorators/role.decorator';
 import { IsPublic } from '../auth/decorators/public.decorator';
 import { ValidateMongoId } from 'src/shared/pipes/validate.pipe';
@@ -85,10 +89,14 @@ export class UserController {
       query.limit,
       'role',
     );
+    const total = await this._modelService.getTotalRow();
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: UserConstant.MODEL_NAME,
-      data: records,
+      data: {
+        list: records,
+        total,
+      },
     });
   }
 
@@ -257,6 +265,40 @@ export class UserController {
       object: UserConstant.MODEL_NAME,
       data: records,
     });
+  }
+
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Put(`:id`)
+  @ApiOperation({
+    summary: `--- update Role user ${UserConstant.MODEL_NAME} ---`,
+  })
+  public async updateRoleUser(
+    @GetUserRole() role: string,
+    @Body() body: UpdateRoleUserDto,
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    let canUpdate = false;
+    if (role == RoleConstant.LIST_ROLES.Root) {
+      canUpdate = true;
+    } else {
+      const user = await this._modelService.getInfo(id);
+
+      if (user && user.role.name == RoleConstant.LIST_ROLES.User) {
+        canUpdate = true;
+      }
+    }
+    if (canUpdate) {
+      const records = await this._modelService.update(id, {
+        role: this._modelService._getID(body.role),
+      });
+      return BaseResponse.success({
+        statusCode: BaseHttpStatus.OK,
+        object: UserConstant.MODEL_NAME,
+        data: records,
+      });
+    } else {
+      return BaseResponse.forbidden(UserConstant.MODEL_NAME);
+    }
   }
 
   // ========== API DELETE ==========

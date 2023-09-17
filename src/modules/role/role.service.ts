@@ -30,4 +30,11 @@ export class RoleService extends BaseApiService<RoleModel> {
     }
     return records;
   }
+
+  public async getAllNotRoot(): Promise<RoleModel[]> {
+    const records = await this._model.find({
+      name: { $ne: RoleConstant.LIST_ROLES.Root },
+    });
+    return records;
+  }
 }

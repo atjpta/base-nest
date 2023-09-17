@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RoleConstant } from './constant/role.constant';
@@ -14,7 +13,6 @@ import { RoleService } from './role.service';
 import { BaseResponse, IHttpSuccess } from 'src/base/response';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { BaseHttpStatus } from 'src/base/http-status';
-import { QueryFindAll } from 'src/base/query-dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { ValidateMongoId } from 'src/shared/pipes/validate.pipe';
 import { HasRoles } from '../auth/decorators/role.decorator';
@@ -46,15 +44,13 @@ export class RoleController {
 
   // ========== API GET ==========
 
-  @HasRoles(RoleConstant.LIST_ROLES.Root)
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Get()
   @ApiOperation({
     summary: `--- find all ${RoleConstant.MODEL_NAME}  in system ---`,
   })
-  public async findAll(
-    @Query() query: QueryFindAll,
-  ): Promise<IHttpSuccess | HttpException> {
-    const records = await this._modelService.findAll(query.page, query.limit);
+  public async findAll(): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getAllNotRoot();
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: RoleConstant.MODEL_NAME,

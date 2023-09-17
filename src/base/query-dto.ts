@@ -21,5 +21,5 @@ export class QueryFindAll {
     example: 10,
     description: `limit of documents`,
   })
-  limit?: number = Infinity;
+  limit?: number = Number.MAX_SAFE_INTEGER;
 }
