@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Inject,
@@ -302,4 +303,35 @@ export class UserController {
   }
 
   // ========== API DELETE ==========
+
+  @HasRoles(RoleConstant.LIST_ROLES.Root)
+  @Delete(`:id`)
+  @ApiOperation({
+    summary: `--- Delete user ${UserConstant.MODEL_NAME} ---`,
+  })
+  public async deleteUser(
+    @GetUserRole() role: string,
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    let canDelete = false;
+    if (role == RoleConstant.LIST_ROLES.Root) {
+      canDelete = true;
+    } else {
+      const user = await this._modelService.getInfo(id);
+
+      if (user && user.role.name == RoleConstant.LIST_ROLES.Root) {
+        return BaseResponse.notAcceptable(UserConstant.MODEL_NAME);
+      }
+    }
+    if (canDelete) {
+      const records = await this._modelService.removeById(id);
+      return BaseResponse.success({
+        statusCode: BaseHttpStatus.OK,
+        object: UserConstant.MODEL_NAME,
+        data: records,
+      });
+    } else {
+      return BaseResponse.forbidden(UserConstant.MODEL_NAME);
+    }
+  }
 }

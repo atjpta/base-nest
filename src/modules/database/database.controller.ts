@@ -47,6 +47,19 @@ export class DatabaseController {
 
   // ========== API GET ==========
 
+  @Get(`test-await`)
+  @ApiOperation({
+    summary: '--- test await 5s ---',
+  })
+  public async testAwait() {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: 'collection',
+      data: 1,
+    });
+  }
+
   @Get()
   @ApiOperation({
     summary: '--- Get all name of collection ---',
