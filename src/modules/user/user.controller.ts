@@ -320,7 +320,11 @@ export class UserController {
       const user = await this._modelService.getInfo(id);
 
       if (user && user.role.name == RoleConstant.LIST_ROLES.Root) {
-        return BaseResponse.notAcceptable(UserConstant.MODEL_NAME);
+        return BaseResponse.success({
+          statusCode: BaseHttpStatus.NOT_ACCEPT,
+          object: UserConstant.MODEL_NAME,
+          data: 1,
+        });
       }
     }
     if (canDelete) {
