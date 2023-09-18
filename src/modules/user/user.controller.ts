@@ -316,16 +316,10 @@ export class UserController {
     let canDelete = false;
     if (role == RoleConstant.LIST_ROLES.Root) {
       canDelete = true;
-    } else {
-      const user = await this._modelService.getInfo(id);
-
-      if (user && user.role.name == RoleConstant.LIST_ROLES.Root) {
-        return BaseResponse.success({
-          statusCode: BaseHttpStatus.NOT_ACCEPT,
-          object: UserConstant.MODEL_NAME,
-          data: 1,
-        });
-      }
+    }
+    const user = await this._modelService.getInfo(id);
+    if (user && user.role.name == RoleConstant.LIST_ROLES.Root) {
+      return BaseResponse.notAcceptable(UserConstant.MODEL_NAME);
     }
     if (canDelete) {
       const records = await this._modelService.removeById(id);
