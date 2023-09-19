@@ -25,6 +25,7 @@ export class UserModel extends BaseMongoDbSchema {
 
   @Prop({
     type: String,
+    index: 'text',
   })
   fullName: string;
 

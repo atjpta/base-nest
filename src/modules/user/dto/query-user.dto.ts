@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { QueryFindAll } from 'src/base/query-dto';
 
 export class QueryForgetAccount {
   @IsString()
@@ -15,4 +16,15 @@ export class QueryForgetAccount {
     description: 'email account',
   })
   email: string;
+}
+
+export class QueryFindAllUser extends QueryFindAll {
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    example: 'aa',
+    description: 'username account',
+  })
+  key?: string;
 }

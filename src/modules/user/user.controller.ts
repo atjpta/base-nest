@@ -22,7 +22,6 @@ import { UserService } from './user.service';
 import { BaseResponse, IHttpSuccess } from 'src/base/response';
 import { CreateUserDto, createNewPassword } from './dto/create-user.dto';
 import { BaseHttpStatus } from 'src/base/http-status';
-import { QueryFindAll } from 'src/base/query-dto';
 import {
   UpdatePasswordDto,
   UpdateRoleUserDto,
@@ -42,6 +41,7 @@ import { Cache } from 'cache-manager';
 import { Request } from 'express';
 import { AppConfig } from 'src/configs/app.config';
 import { ImageConstant } from '../image/constant/image.constant';
+import { QueryFindAllUser } from './dto/query-user.dto';
 @ApiBearerAuth()
 @ApiTags(UserConstant.SWAGGER_TAG)
 @Controller({ path: UserConstant.API_PREFIX })
@@ -83,14 +83,14 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: `--- find all ${UserConstant.MODEL_NAME} ---` })
   public async findAll(
-    @Query() query: QueryFindAll,
+    @Query() query: QueryFindAllUser,
   ): Promise<IHttpSuccess | HttpException> {
-    const records = await this._modelService.findAllAndPopulate(
+    const records = await this._modelService.findAllSearch(
+      query.key,
       query.page,
       query.limit,
-      'role',
     );
-    const total = await this._modelService.getTotalRow();
+    const total = await this._modelService.findAllSearchCount(query.key);
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: UserConstant.MODEL_NAME,

@@ -114,4 +114,30 @@ export class UserService extends BaseApiService<UserModel> {
 
     return records;
   }
+
+  public async findAllSearch(
+    key: string,
+    page: number,
+    limit: number,
+  ): Promise<UserModel[]> {
+    const skipIndex = (page - 1) * limit;
+    const condition = key ? { $text: { $search: key } } : {};
+    console.log(key);
+    console.log(condition);
+
+    const records = await this._model
+      .find(condition)
+      .populate('role')
+      .sort('-createdAt')
+      .limit(limit)
+      .skip(skipIndex)
+      .exec();
+    return records;
+  }
+
+  public async findAllSearchCount(key: string): Promise<number> {
+    const condition = key ? { $text: { $search: key } } : {};
+    const records = await this._model.find(condition).exec();
+    return records.length;
+  }
 }
