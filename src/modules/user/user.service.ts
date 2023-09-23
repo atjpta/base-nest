@@ -122,8 +122,6 @@ export class UserService extends BaseApiService<UserModel> {
   ): Promise<UserModel[]> {
     const skipIndex = (page - 1) * limit;
     const condition = key ? { $text: { $search: key } } : {};
-    console.log(key);
-    console.log(condition);
 
     const records = await this._model
       .find(condition)

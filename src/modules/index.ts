@@ -12,6 +12,10 @@ import { SongModule } from './song/song.module';
 import { CacheRedisModule } from './cache-redis/cache-redis.module';
 import { MailModule } from './mail/mail.module';
 import { BullRedisModule } from './bull/bull.module';
+import { ArtistModule } from './artist/artist.module';
+import { CountryModule } from './country/country.module';
+import { GenreModule } from './genre/genre.module';
+import { SingerModule } from './singer/singer.module';
 
 export const APP_MODULES = [
   DatabaseModule,
@@ -24,6 +28,10 @@ export const APP_MODULES = [
   FileModule,
   ImageModule,
   SongModule,
+  ArtistModule,
+  CountryModule,
+  GenreModule,
+  SingerModule,
   // SocketManagerModule,
 ];
 

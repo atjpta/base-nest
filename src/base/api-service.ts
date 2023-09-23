@@ -87,4 +87,27 @@ export class BaseApiService<T> {
     const docs = await this._model.deleteMany();
     return docs;
   }
+
+  public async findAllSearchDefault(
+    key: string,
+    page: number,
+    limit: number,
+  ): Promise<T[]> {
+    const skipIndex = (page - 1) * limit;
+    const condition = key ? { $text: { $search: key } } : {};
+
+    const records = await this._model
+      .find(condition)
+      .sort('-createdAt')
+      .limit(limit)
+      .skip(skipIndex)
+      .exec();
+    return records;
+  }
+
+  public async findAllSearchCountDefault(key: string): Promise<number> {
+    const condition = key ? { $text: { $search: key } } : {};
+    const records = await this._model.find(condition).exec();
+    return records.length;
+  }
 }
