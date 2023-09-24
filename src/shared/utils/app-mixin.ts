@@ -3,6 +3,12 @@
  */
 
 export class AppMixin {
+  static parseArray = (str: any) => {
+    if (str) {
+      return str.toString().split(',');
+    }
+    return null;
+  };
   static toArray = (data?: any): any[] => {
     let resData: any[] = [];
 

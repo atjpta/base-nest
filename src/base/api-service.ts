@@ -92,12 +92,14 @@ export class BaseApiService<T> {
     key: string,
     page: number,
     limit: number,
+    populate?: string,
   ): Promise<T[]> {
     const skipIndex = (page - 1) * limit;
     const condition = key ? { $text: { $search: key } } : {};
 
     const records = await this._model
       .find(condition)
+      .populate(populate)
       .sort('-createdAt')
       .limit(limit)
       .skip(skipIndex)

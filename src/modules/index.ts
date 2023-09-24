@@ -16,6 +16,7 @@ import { ArtistModule } from './artist/artist.module';
 import { CountryModule } from './country/country.module';
 import { GenreModule } from './genre/genre.module';
 import { SingerModule } from './singer/singer.module';
+import { MusicModule } from './music/music.module';
 
 export const APP_MODULES = [
   DatabaseModule,
@@ -32,6 +33,7 @@ export const APP_MODULES = [
   CountryModule,
   GenreModule,
   SingerModule,
+  MusicModule,
   // SocketManagerModule,
 ];
 

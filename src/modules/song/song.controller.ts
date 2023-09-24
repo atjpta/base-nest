@@ -74,13 +74,14 @@ export class SongController {
     await this._modelService.downloadFileByName(filename);
 
     const record = await this._modelService.findOneInfoFile(filename);
-    if (record[0]) {
+
+    if (record) {
       const recordStream = await this._modelService.downloadFileByName(
         filename,
       );
       res.setHeader('Content-Type', 'audio/mpeg');
       res.setHeader('Accept-Ranges', 'bytes');
-      res.setHeader('Content-Length', record[0].length);
+      res.setHeader('Content-Length', record.length);
       res.setHeader('Content-Range', 'bytes');
       recordStream.pipe(res);
     }
@@ -100,7 +101,7 @@ export class SongController {
     @Res() res: Response,
   ): Promise<IHttpSuccess> {
     const record = await this._modelService.findOneInfoFile(filename);
-    if (record[0]) {
+    if (record) {
       const recordStream = await this._modelService.downloadFileByName(
         filename,
       );
