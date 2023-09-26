@@ -1,3 +1,4 @@
+import { IsPublic } from './../auth/decorators/public.decorator';
 import { AppMixin } from 'src/shared/utils/app-mixin';
 import {
   Body,
@@ -32,7 +33,7 @@ import { AppConfig } from 'src/configs/app.config';
 import { ImageConstant } from '../image/constant/image.constant';
 import { SongConstant } from '../song/constant/song.constant';
 import { GetUserId } from '../auth/decorators/user.decorator';
-@HasRoles(RoleConstant.LIST_ROLES.Admin)
+
 @ApiBearerAuth()
 @ApiTags(MusicConstant.SWAGGER_TAG)
 @Controller({ path: MusicConstant.API_PREFIX })
@@ -42,6 +43,7 @@ export class MusicController {
   // ========== API POST ==========
 
   @Post(``)
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
     summary: `--- Create ${MusicConstant.MODEL_NAME} ---`,
@@ -82,6 +84,7 @@ export class MusicController {
 
   // ========== API GET ==========
 
+  @IsPublic()
   @Get()
   @ApiOperation({
     summary: `--- find all ${MusicConstant.MODEL_NAME}  ---`,
@@ -106,6 +109,7 @@ export class MusicController {
   // ========== API PUT ==========
 
   @Put(`:id`)
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
     summary: `--- update ${MusicConstant.MODEL_NAME}  by id ---`,
@@ -145,6 +149,7 @@ export class MusicController {
   // ========== API DELETE ==========
 
   @Delete(`:id`)
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @ApiOperation({
     summary: `--- Delete ${MusicConstant.MODEL_NAME}  by id ---`,
   })

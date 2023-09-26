@@ -29,7 +29,7 @@ import { AppConfig } from 'src/configs/app.config';
 import { ImageConstant } from '../image/constant/image.constant';
 import { Request } from 'express';
 import { QuerySearchArtistDto } from '../artist/dto/query-artist.dto';
-@HasRoles(RoleConstant.LIST_ROLES.Admin)
+import { IsPublic } from '../auth/decorators/public.decorator';
 @ApiBearerAuth()
 @ApiTags(CountryConstant.SWAGGER_TAG)
 @Controller({ path: CountryConstant.API_PREFIX })
@@ -38,6 +38,7 @@ export class CountryController {
 
   // ========== API POST ==========
 
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Post(``)
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
@@ -62,7 +63,7 @@ export class CountryController {
   }
 
   // ========== API GET ==========
-
+  @IsPublic()
   @Get()
   @ApiOperation({
     summary: `--- find all ${CountryConstant.MODEL_NAME}  ---`,
@@ -85,6 +86,7 @@ export class CountryController {
 
   // ========== API PUT ==========
 
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Put(`:id`)
   @ApiConsumes('multipart/form-data')
   @ApiOperation({
@@ -111,6 +113,7 @@ export class CountryController {
 
   // ========== API DELETE ==========
 
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Delete(`:id`)
   @ApiOperation({
     summary: `--- Delete ${CountryConstant.MODEL_NAME}  by id ---`,
