@@ -11,6 +11,7 @@ import {
   Query,
   Req,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -103,6 +104,23 @@ export class MusicController {
       statusCode: BaseHttpStatus.OK,
       object: MusicConstant.MODEL_NAME,
       data: { list: records, total: total },
+    });
+  }
+
+  @IsPublic()
+  @Get('random/:id')
+  @ApiOperation({
+    summary: `--- find random ${MusicConstant.MODEL_NAME}  ---`,
+  })
+  public async findRandom(
+    @Param('id', ValidateMongoId) id: string,
+    @Query('size', ParseIntPipe) size: number = 10,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getRandom(id, size);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: MusicConstant.MODEL_NAME,
+      data: records,
     });
   }
 

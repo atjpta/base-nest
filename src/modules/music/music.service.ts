@@ -13,4 +13,50 @@ export class MusicService extends BaseApiService<MusicModel> {
   ) {
     super(_model);
   }
+
+  public async getRandom(id: string, size: number) {
+    const records = await this._model.aggregate([
+      {
+        $match: {
+          _id: { $ne: this._getID(id) },
+        },
+      },
+      {
+        $lookup: {
+          from: 'artists',
+          localField: 'artist',
+          foreignField: '_id',
+          as: 'artist',
+        },
+      },
+      {
+        $lookup: {
+          from: 'singers',
+          localField: 'singer',
+          foreignField: '_id',
+          as: 'singer',
+        },
+      },
+      {
+        $lookup: {
+          from: 'genres',
+          localField: 'genre',
+          foreignField: '_id',
+          as: 'genre',
+        },
+      },
+      {
+        $lookup: {
+          from: 'countries',
+          localField: 'country',
+          foreignField: '_id',
+          as: 'country',
+        },
+      },
+
+      { $sample: { size } },
+      { $sort: { view: -1, createdAt: -1 } },
+    ]);
+    return records;
+  }
 }
