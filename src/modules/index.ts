@@ -17,6 +17,10 @@ import { CountryModule } from './country/country.module';
 import { GenreModule } from './genre/genre.module';
 import { SingerModule } from './singer/singer.module';
 import { MusicModule } from './music/music.module';
+import { PlaylistModule } from './playlist/playlist.module';
+import { CommentModule } from './comment/comment.module';
+import { FavoriteModule } from './favorite/favorite.module';
+import { NewsModule } from './news/news.module';
 
 export const APP_MODULES = [
   DatabaseModule,
@@ -34,6 +38,10 @@ export const APP_MODULES = [
   GenreModule,
   SingerModule,
   MusicModule,
+  PlaylistModule,
+  CommentModule,
+  FavoriteModule,
+  NewsModule,
   // SocketManagerModule,
 ];
 
