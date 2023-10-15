@@ -56,4 +56,12 @@ export class CreateMusicDto extends CreateFilesArrayMongoDBDto {
     description: 'url song',
   })
   url?: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description: 'name_origin song',
+  })
+  name_origin?: string;
 }

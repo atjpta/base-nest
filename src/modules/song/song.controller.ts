@@ -71,10 +71,7 @@ export class SongController {
     @Param('filename') filename: string,
     @Res() res: Response,
   ): Promise<IHttpSuccess> {
-    await this._modelService.downloadFileByName(filename);
-
     const record = await this._modelService.findOneInfoFile(filename);
-
     if (record) {
       const recordStream = await this._modelService.downloadFileByName(
         filename,

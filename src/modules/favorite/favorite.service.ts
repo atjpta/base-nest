@@ -26,11 +26,22 @@ export class FavoriteService extends BaseApiService<FavoriteModel> {
 
   public async findSlBy(model_id: string) {
     const records = await this._model.find({ model: model_id });
+    return records.length;
+  }
+
+  public async findOneByUser(model_id: string, user: string) {
+    const records = await this._model.findOne({
+      model: model_id,
+      createdBy: user,
+    });
     return records;
   }
 
-  public async findOneByUser(model_id, user) {
-    const records = await this._model.findOne({ model: model_id, user: user });
+  public async removeByUser(user_id: string, model: string) {
+    const records = await this._model.deleteOne({
+      createdBy: this._getID(user_id),
+      model,
+    });
     return records;
   }
 }

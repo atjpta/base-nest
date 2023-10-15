@@ -62,4 +62,8 @@ export class MusicModel extends BaseMongoDbSchema {
     type: String,
   })
   url: string;
+  @Prop({
+    type: String,
+  })
+  name_origin: string;
 }

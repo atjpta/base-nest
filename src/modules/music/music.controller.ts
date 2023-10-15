@@ -1,3 +1,4 @@
+import { SongService } from './../song/song.service';
 import { IsPublic } from './../auth/decorators/public.decorator';
 import { AppMixin } from 'src/shared/utils/app-mixin';
 import {
@@ -12,6 +13,7 @@ import {
   Req,
   Delete,
   ParseIntPipe,
+  Res,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -28,7 +30,7 @@ import { UpdateMusicDto } from './dto/update-music.dto';
 import { ValidateMongoId } from 'src/shared/pipes/validate.pipe';
 import { RoleConstant } from '../role/constant/role.constant';
 import { HasRoles } from '../auth/decorators/role.decorator';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { QuerySearchArtistDto } from '../artist/dto/query-artist.dto';
 import { AppConfig } from 'src/configs/app.config';
 import { ImageConstant } from '../image/constant/image.constant';
@@ -39,7 +41,10 @@ import { GetUserId } from '../auth/decorators/user.decorator';
 @ApiTags(MusicConstant.SWAGGER_TAG)
 @Controller({ path: MusicConstant.API_PREFIX })
 export class MusicController {
-  constructor(private readonly _modelService: MusicService) {}
+  constructor(
+    private readonly _modelService: MusicService,
+    private songService: SongService,
+  ) {}
 
   // ========== API POST ==========
 
@@ -69,6 +74,7 @@ export class MusicController {
           body.url = `${AppConfig.urlServer || SongConstant.URL_API}/${
             SongConstant.API_PREFIX
           }/${req.files[i].originalname}`;
+          body.name_origin = req.files[i].originalname;
         }
       }
     }
@@ -121,6 +127,40 @@ export class MusicController {
       statusCode: BaseHttpStatus.OK,
       object: MusicConstant.MODEL_NAME,
       data: records,
+    });
+  }
+
+  @IsPublic()
+  @Get('download/:id')
+  @ApiOperation({
+    summary: `--- down load one ${MusicConstant.MODEL_NAME}  ---`,
+  })
+  public async downOne(
+    @Param('id', ValidateMongoId) id: string,
+    @Res() res: Response,
+  ) {
+    const music = await this._modelService.findOneById(id);
+
+    const record = await this.songService.findOneInfoFile(music.name_origin);
+    const extension = music.name_origin.split('.')[1];
+    if (record) {
+      const recordStream = await this.songService.downloadFileByName(
+        music.name_origin,
+      );
+
+      const safeFileName = encodeURIComponent(music.name);
+      const safeExtension = encodeURIComponent(extension);
+
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader(
+        'Content-Disposition',
+        `attachment; filename=${safeFileName}.${safeExtension}`,
+      );
+      return recordStream.pipe(res);
+    }
+    return BaseResponse.success({
+      object: SongConstant.BUCKETS,
+      statusCode: BaseHttpStatus.NO_FOUND,
     });
   }
 

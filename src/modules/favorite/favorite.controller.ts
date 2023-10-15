@@ -6,7 +6,6 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -16,7 +15,6 @@ import { BaseHttpStatus } from 'src/base/http-status';
 import { ValidateMongoId } from 'src/shared/pipes/validate.pipe';
 import { RoleConstant } from '../role/constant/role.constant';
 import { HasRoles } from '../auth/decorators/role.decorator';
-import { QuerySearchArtistDto } from '../artist/dto/query-artist.dto';
 import { IsPublic } from '../auth/decorators/public.decorator';
 import { FavoriteConstant } from './constant/favorite.constant';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
@@ -50,24 +48,52 @@ export class FavoriteController {
   }
 
   // ========== API GET ==========
-  @IsPublic()
-  @Get()
+  @Get(`modelType/:type`)
   @ApiOperation({
-    summary: `--- find all ${FavoriteConstant.MODEL_NAME}  ---`,
+    summary: `--- find model ${FavoriteConstant.MODEL_NAME}  ---`,
   })
-  public async findAll(
-    @Query() query: QuerySearchArtistDto,
+  public async findModel(
+    @Param('type') type: string,
+    @GetUserId() user_id: string,
   ): Promise<IHttpSuccess | HttpException> {
-    const records = await this._modelService.findAllSearchDefault(
-      query.key,
-      query.page,
-      query.limit,
-    );
-    const total = await this._modelService.findAllSearchCountDefault(query.key);
+    const records = await this._modelService.findModelByUSer(type, user_id);
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: FavoriteConstant.MODEL_NAME,
-      data: { list: records, total: total },
+      data: records,
+    });
+  }
+
+  @Get(`model/:id`)
+  @ApiOperation({
+    summary: `--- find one ${FavoriteConstant.MODEL_NAME}  ---`,
+  })
+  public async findOne(
+    @Param('id', ValidateMongoId) id: string,
+    @GetUserId() user_id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findOneByUser(id, user_id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: FavoriteConstant.MODEL_NAME,
+      data: records,
+    });
+  }
+
+  @IsPublic()
+  @Get(`model/length/:id`)
+  @ApiOperation({
+    summary: `--- find one ${FavoriteConstant.MODEL_NAME}  ---`,
+  })
+  public async findLength(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findSlBy(id);
+
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: FavoriteConstant.MODEL_NAME,
+      data: { length: records },
     });
   }
 
@@ -99,8 +125,9 @@ export class FavoriteController {
   })
   public async delete(
     @Param('id', ValidateMongoId) id: string,
+    @GetUserId() user_id: string,
   ): Promise<IHttpSuccess | HttpException> {
-    const records = await this._modelService.removeById(id);
+    const records = await this._modelService.removeByUser(user_id, id);
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: FavoriteConstant.MODEL_NAME,

@@ -5,9 +5,11 @@ import { MusicService } from './music.service';
 import { MusicConstant } from './constant/music.constant';
 import { MusicModel } from './schema/music.schema';
 import { uploadMusicMiddleware } from './middleware/music.middleware';
+import { SongModule } from '../song/song.module';
 
 @Module({
   imports: [
+    SongModule,
     MongooseModule.forFeature([
       {
         name: MusicConstant.MODEL_NAME,
