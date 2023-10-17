@@ -22,6 +22,22 @@ export class MusicService extends BaseApiService<MusicModel> {
         },
       },
       {
+        $addFields: { id_string: { $toString: '$_id' } },
+      },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: 'id_string',
+          foreignField: 'model',
+          as: 'comments',
+        },
+      },
+      {
+        $addFields: {
+          count_comments: { $size: '$comments' },
+        },
+      },
+      {
         $lookup: {
           from: 'artists',
           localField: 'artist',

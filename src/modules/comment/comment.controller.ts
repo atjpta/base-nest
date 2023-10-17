@@ -73,7 +73,7 @@ export class CommentController {
   }
 
   @IsPublic()
-  @Get(':id')
+  @Get('model/:id')
   @ApiOperation({
     summary: `--- find all ${CommentConstant.MODEL_NAME} by id model (chưa có phân trang) ---`,
   })
