@@ -19,8 +19,8 @@ export class PlaylistService extends BaseApiService<PlaylistModel> {
     const records = await this._model.findByIdAndUpdate(
       this._getID(id),
       {
-        $set: {
-          list: data.list,
+        $addToSet: {
+          list: data.music,
         },
       },
       { new: true },
@@ -32,8 +32,8 @@ export class PlaylistService extends BaseApiService<PlaylistModel> {
     const records = await this._model.findByIdAndUpdate(
       this._getID(id),
       {
-        $pullAll: {
-          list: data.list,
+        $pull: {
+          list: data.music,
         },
       },
       { new: true },
@@ -50,5 +50,57 @@ export class PlaylistService extends BaseApiService<PlaylistModel> {
       },
     });
     return record;
+  }
+
+  public async findAllByUser(id: string) {
+    const record = await this._model.find({
+      createdBy: this._getID(id),
+    });
+    return record;
+  }
+
+  public async findAllSearch(
+    user_id: string,
+    key: string,
+    page: number,
+    limit: number,
+    populate?: string,
+  ) {
+    const skipIndex = (page - 1) * limit;
+    const condition = key ? { $text: { $search: key } } : {};
+
+    const records = await this._model
+      .find({ ...condition, createdBy: this._getID(user_id) })
+      .populate(populate)
+      .sort('-createdAt')
+      .limit(limit)
+      .skip(skipIndex)
+      .exec();
+    return records;
+  }
+
+  public async findAllSearchCount(
+    key: string,
+    user_id: string,
+  ): Promise<number> {
+    const condition = key ? { $text: { $search: key } } : {};
+    const records = await this._model
+      .find({ ...condition, createdBy: this._getID(user_id) })
+      .exec();
+    return records.length;
+  }
+
+  public async findMusicById(id: string) {
+    const records = await this._model
+      .findOne({ _id: this._getID(id) })
+      .populate({
+        path: 'list',
+        populate: {
+          path: 'singer genre country',
+          select: 'id name',
+        },
+      })
+      .exec();
+    return records;
   }
 }

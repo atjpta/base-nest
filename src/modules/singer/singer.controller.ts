@@ -84,6 +84,22 @@ export class SingerController {
     });
   }
 
+  @IsPublic()
+  @Get(':id')
+  @ApiOperation({
+    summary: `--- find one ${SingerConstant.MODEL_NAME} by id ---`,
+  })
+  public async findOne(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findOneById(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: SingerConstant.MODEL_NAME,
+      data: records,
+    });
+  }
+
   // ========== API PUT ==========
 
   @HasRoles(RoleConstant.LIST_ROLES.Admin)

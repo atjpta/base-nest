@@ -19,7 +19,7 @@ export class CommentModel extends BaseMongoDbSchema {
   content: string;
 
   @Prop({
-    type: mongoose.Schema.Types.Mixed,
+    type: mongoose.Schema.Types.ObjectId,
     refPath: 'modelType',
   })
   model: MusicModel & CommentModel;

@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { BaseApiService } from 'src/base/api-service';
 import { FavoriteModel } from './schema/favorite.schema';
 import { FavoriteConstant } from './constant/favorite.constant';
+import { MusicConstant } from '../music/constant/music.constant';
 
 @Injectable()
 export class FavoriteService extends BaseApiService<FavoriteModel> {
@@ -16,10 +17,21 @@ export class FavoriteService extends BaseApiService<FavoriteModel> {
 
   public async findModelByUSer(modelType: string, user: string) {
     const records = await this._model
-      .find({ modelType: modelType, user: user, model: { $ne: null } })
+      .find({
+        modelType: modelType,
+        createdBy: this._getID(user),
+        model: { $ne: null },
+      })
       .populate({
         path: 'model',
         match: { _id: { $ne: null } },
+        populate:
+          modelType == MusicConstant.MODEL_NAME
+            ? {
+                path: 'singer genre country',
+                select: 'id name',
+              }
+            : '',
       });
     return records;
   }

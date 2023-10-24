@@ -114,6 +114,30 @@ export class MusicController {
   }
 
   @IsPublic()
+  @Get('model/:type/:id')
+  @ApiOperation({
+    summary: `--- find all ${MusicConstant.MODEL_NAME} by model type + id ---`,
+  })
+  public async findAllByModel(
+    @Query() query: QuerySearchArtistDto,
+    @Param('id') id: string,
+    @Param('type') type: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findAllByModel(
+      type,
+      id,
+      query.page,
+      query.limit,
+    );
+    const total = await this._modelService.findAllByModelCount(type, id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: MusicConstant.MODEL_NAME,
+      data: { list: records, total: total },
+    });
+  }
+
+  @IsPublic()
   @Get('random/:id')
   @ApiOperation({
     summary: `--- find random ${MusicConstant.MODEL_NAME}  ---`,

@@ -17,7 +17,7 @@ export class FavoriteModel extends BaseMongoDbSchema {
   createdBy: UserModel;
 
   @Prop({
-    type: mongoose.Schema.Types.Mixed,
+    type: mongoose.Schema.Types.ObjectId,
     refPath: 'modelType',
   })
   model: MusicModel & PlaylistModel & SingerModel & CommentModel;

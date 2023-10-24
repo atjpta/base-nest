@@ -6,9 +6,9 @@ import {
   Param,
   Post,
   Put,
-  Query,
   Req,
   Delete,
+  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -23,7 +23,6 @@ import { ValidateMongoId } from 'src/shared/pipes/validate.pipe';
 import { AppConfig } from 'src/configs/app.config';
 import { ImageConstant } from '../image/constant/image.constant';
 import { Request } from 'express';
-import { QuerySearchArtistDto } from '../artist/dto/query-artist.dto';
 import { IsPublic } from '../auth/decorators/public.decorator';
 import { PlaylistConstant } from './constant/playlist.constant';
 import { CreatePlaylistDto } from './dto/create-playlist.dto';
@@ -32,6 +31,7 @@ import {
   UpdatePlaylistDto,
 } from './dto/update-playlist.dto';
 import { GetUserId } from '../auth/decorators/user.decorator';
+import { QuerySearchArtistDto } from '../artist/dto/query-artist.dto';
 @ApiBearerAuth()
 @ApiTags(PlaylistConstant.SWAGGER_TAG)
 @Controller({ path: PlaylistConstant.API_PREFIX })
@@ -66,20 +66,39 @@ export class PlaylistController {
   }
 
   // ========== API GET ==========
-  @IsPublic()
   @Get()
   @ApiOperation({
-    summary: `--- find all ${PlaylistConstant.MODEL_NAME}  ---`,
+    summary: `--- find all ${PlaylistConstant.MODEL_NAME} by user id  ---`,
   })
   public async findAll(
+    @GetUserId() id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findAllByUser(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: PlaylistConstant.MODEL_NAME,
+      data: records,
+    });
+  }
+
+  @Get('search')
+  @ApiOperation({
+    summary: `--- find all ${PlaylistConstant.MODEL_NAME} have pagination ---`,
+  })
+  public async findAll2(
+    @GetUserId() user_id: string,
     @Query() query: QuerySearchArtistDto,
   ): Promise<IHttpSuccess | HttpException> {
-    const records = await this._modelService.findAllSearchDefault(
+    const records = await this._modelService.findAllSearch(
+      user_id,
       query.key,
       query.page,
       query.limit,
     );
-    const total = await this._modelService.findAllSearchCountDefault(query.key);
+    const total = await this._modelService.findAllSearchCount(
+      query.key,
+      user_id,
+    );
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: PlaylistConstant.MODEL_NAME,
@@ -95,7 +114,7 @@ export class PlaylistController {
   public async findOne(
     @Param('id', ValidateMongoId) id: string,
   ): Promise<IHttpSuccess | HttpException> {
-    const records = await this._modelService.findOne(id);
+    const records = await this._modelService.findMusicById(id);
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: PlaylistConstant.MODEL_NAME,
@@ -129,7 +148,7 @@ export class PlaylistController {
     });
   }
 
-  @Put(`add-music/:id`)
+  @Put(`:id/add-music`)
   @ApiOperation({
     summary: `--- add music ${PlaylistConstant.MODEL_NAME} by id ---`,
   })
@@ -145,7 +164,7 @@ export class PlaylistController {
     });
   }
 
-  @Put(`remove-music/:id`)
+  @Put(`:id/remove-music`)
   @ApiOperation({
     summary: `--- remove music ${PlaylistConstant.MODEL_NAME} by id ---`,
   })

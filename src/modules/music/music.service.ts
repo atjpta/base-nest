@@ -75,4 +75,25 @@ export class MusicService extends BaseApiService<MusicModel> {
     ]);
     return records;
   }
+
+  public async findAllByModel(
+    type: string,
+    id: string,
+    page: number,
+    limit: number,
+  ) {
+    const skipIndex = (page - 1) * limit;
+    const records = await this._model
+      .find({ [type]: { $gte: id } })
+      .populate('singer genre country', 'id name')
+      .sort({ view: -1, createdAt: -1 })
+      .limit(limit)
+      .skip(skipIndex);
+    return records;
+  }
+
+  public async findAllByModelCount(type: string, id: string) {
+    const records = await this._model.find({ [type]: { $gte: id } });
+    return records.length;
+  }
 }
