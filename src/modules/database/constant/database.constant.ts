@@ -1,3 +1,4 @@
+import { ReportConstant } from './../../report/constant/report.constant';
 import { CommentConstant } from 'src/modules/comment/constant/comment.constant';
 import { SingerConstant } from './../../singer/constant/singer.constant';
 import { AppConstant } from 'src/modules/app/constant/app.constant';
@@ -12,6 +13,7 @@ import { SongConstant } from 'src/modules/song/constant/song.constant';
 import { UserConstant } from 'src/modules/user/constant/user.constant';
 import { PlaylistConstant } from 'src/modules/playlist/constant/playlist.constant';
 import { NewsConstant } from 'src/modules/news/constant/news.constant';
+import { StatusCommentConstant } from 'src/modules/status-comment/constant/status-comment.constant';
 
 export class DatabasesConstant {
   static SWAGGER_TAG = `database`;
@@ -31,5 +33,7 @@ export class DatabasesConstant {
     CommentConstant.MODEL_NAME,
     PlaylistConstant.MODEL_NAME,
     NewsConstant.MODEL_NAME,
+    ReportConstant.MODEL_NAME,
+    StatusCommentConstant.MODEL_NAME,
   ];
 }

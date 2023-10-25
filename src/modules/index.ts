@@ -21,6 +21,8 @@ import { PlaylistModule } from './playlist/playlist.module';
 import { CommentModule } from './comment/comment.module';
 import { FavoriteModule } from './favorite/favorite.module';
 import { NewsModule } from './news/news.module';
+import { StatusCommentModule } from './status-comment/status-comment.module';
+import { ReportModule } from './report/report.module';
 
 export const APP_MODULES = [
   DatabaseModule,
@@ -42,6 +44,8 @@ export const APP_MODULES = [
   CommentModule,
   FavoriteModule,
   NewsModule,
+  StatusCommentModule,
+  ReportModule,
   // SocketManagerModule,
 ];
 

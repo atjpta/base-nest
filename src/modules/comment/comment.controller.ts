@@ -32,7 +32,6 @@ export class CommentController {
 
   // ========== API POST ==========
 
-  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Post(``)
   @ApiOperation({
     summary: `--- Create ${CommentConstant.MODEL_NAME} ---`,
