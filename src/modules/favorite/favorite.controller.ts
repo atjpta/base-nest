@@ -28,7 +28,6 @@ export class FavoriteController {
 
   // ========== API POST ==========
 
-  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Post(``)
   @ApiOperation({
     summary: `--- Create ${FavoriteConstant.MODEL_NAME} ---`,
