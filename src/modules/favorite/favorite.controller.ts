@@ -117,7 +117,6 @@ export class FavoriteController {
 
   // ========== API DELETE ==========
 
-  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Delete(`:id`)
   @ApiOperation({
     summary: `--- Delete ${FavoriteConstant.MODEL_NAME}  by id ---`,
