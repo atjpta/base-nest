@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   Param,
@@ -45,6 +46,8 @@ export class ReportController {
     });
   }
 
+  // ========== API GET ==========
+
   @Get()
   @ApiOperation({
     summary: `--- find all ${ReportConstant.MODEL_NAME}  ---`,
@@ -64,7 +67,20 @@ export class ReportController {
     });
   }
 
-  // ========== API GET ==========
+  @Get('author/:id')
+  @ApiOperation({
+    summary: `--- find all ${ReportConstant.MODEL_NAME} by author  ---`,
+  })
+  public async findAllByAuthor(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getOneByAuthor(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: ReportConstant.MODEL_NAME,
+      data: records,
+    });
+  }
 
   // ========== API PUT ==========
 
@@ -86,4 +102,52 @@ export class ReportController {
   }
 
   // ========== API DELETE ==========
+
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Delete(`:id`)
+  @ApiOperation({
+    summary: `--- Delete ${ReportConstant.MODEL_NAME}  by id ---`,
+  })
+  public async delete(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.removeById(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: ReportConstant.MODEL_NAME,
+      data: records,
+    });
+  }
+
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Delete(`author/:id`)
+  @ApiOperation({
+    summary: `--- Delete ${ReportConstant.MODEL_NAME}  by author id ---`,
+  })
+  public async deleteByAuthor(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.deleteByAuthor(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: ReportConstant.MODEL_NAME,
+      data: records,
+    });
+  }
+
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Delete(`comment/:id`)
+  @ApiOperation({
+    summary: `--- Delete ${ReportConstant.MODEL_NAME}  by comment id ---`,
+  })
+  public async deleteByComment(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.deleteByComment(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: ReportConstant.MODEL_NAME,
+      data: records,
+    });
+  }
 }
