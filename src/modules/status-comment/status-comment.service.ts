@@ -13,4 +13,50 @@ export class StatusCommentService extends BaseApiService<StatusCommentModel> {
   ) {
     super(_model);
   }
+
+  public async findAllIsWarning(page: number, limit: number) {
+    const skipIndex = (page - 1) * limit;
+    const records = await this._model
+      .find({
+        isBanned: false,
+        endTime: {
+          $gt: new Date().toISOString(),
+        },
+      })
+      .populate('user', '_id username fullName avatar email')
+      .limit(limit)
+      .skip(skipIndex);
+
+    return records;
+  }
+
+  public async findAllIsWarningCount() {
+    const records = await this._model.find({
+      isBanned: false,
+      endTime: {
+        $gt: new Date().toISOString(),
+      },
+    });
+    return records.length;
+  }
+
+  public async findAllIsBanned(page: number, limit: number) {
+    const skipIndex = (page - 1) * limit;
+    const records = await this._model
+      .find({
+        isBanned: true,
+      })
+      .populate('user', '_id username fullName avatar email')
+      .limit(limit)
+      .skip(skipIndex);
+
+    return records;
+  }
+
+  public async findAllIsBannedCount() {
+    const records = await this._model.find({
+      isBanned: true,
+    });
+    return records.length;
+  }
 }

@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { StatusCommentService } from './status-comment.service';
@@ -17,6 +19,7 @@ import { CreateStatusCommentDto } from './dto/create-status-comment.dto';
 import { UpdateStatusCommentDto } from './dto/update-status-comment.dto';
 import { GetUserId } from '../auth/decorators/user.decorator';
 import { StatusCommentConstant } from './constant/status-comment.constant';
+import { QueryFindAll } from 'src/base/query-dto';
 @ApiBearerAuth()
 @ApiTags(StatusCommentConstant.SWAGGER_TAG)
 @Controller({ path: StatusCommentConstant.API_PREFIX })
@@ -48,6 +51,44 @@ export class StatusCommentController {
 
   // ========== API GET ==========
 
+  @Get('warning')
+  @ApiOperation({
+    summary: `--- find all warning ${StatusCommentConstant.MODEL_NAME}  ---`,
+  })
+  public async findAllWarning(
+    @Query() query: QueryFindAll,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findAllIsWarning(
+      query.page,
+      query.limit,
+    );
+    const total = await this._modelService.findAllIsWarningCount();
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: StatusCommentConstant.MODEL_NAME,
+      data: { list: records, total: total },
+    });
+  }
+
+  @Get('banned')
+  @ApiOperation({
+    summary: `--- find all banned ${StatusCommentConstant.MODEL_NAME}  ---`,
+  })
+  public async findAllBan(
+    @Query() query: QueryFindAll,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findAllIsBanned(
+      query.page,
+      query.limit,
+    );
+    const total = await this._modelService.findAllIsBannedCount();
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: StatusCommentConstant.MODEL_NAME,
+      data: { list: records, total: total },
+    });
+  }
+
   // ========== API PUT ==========
 
   @HasRoles(RoleConstant.LIST_ROLES.Admin)
@@ -59,6 +100,13 @@ export class StatusCommentController {
     @Param('id', ValidateMongoId) id: string,
     @Body() body: UpdateStatusCommentDto,
   ): Promise<IHttpSuccess | HttpException> {
+    console.log(body.day);
+
+    if (body.day > 0 || body.day == -99) {
+      const endTime = new Date();
+      endTime.setDate(endTime.getDate() + body.day);
+      body['endTime'] = endTime.toISOString();
+    }
     const records = await this._modelService.update(id, body);
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,

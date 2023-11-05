@@ -6,6 +6,7 @@ import { ReportModel } from './schema/report.schema';
 import { ReportConstant } from './constant/report.constant';
 import { UserConstant } from '../user/constant/user.constant';
 import { CommentConstant } from '../comment/constant/comment.constant';
+import { StatusCommentConstant } from '../status-comment/constant/status-comment.constant';
 
 @Injectable()
 export class ReportService extends BaseApiService<ReportModel> {
@@ -39,12 +40,36 @@ export class ReportService extends BaseApiService<ReportModel> {
           ],
         },
       },
-
+      {
+        $lookup: {
+          from: StatusCommentConstant.MODEL_NAME,
+          localField: '_id',
+          foreignField: 'user',
+          as: 'status',
+        },
+      },
+      {
+        $unwind: '$author',
+      },
       {
         $project: {
           _id: 0,
           author: 1,
           count_reports: 1,
+          status: 1,
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { 'status.0': { $exists: false } },
+            {
+              $and: [
+                { 'status.0.isBanned': false },
+                { 'status.0.endTime': { $lt: new Date().toISOString() } },
+              ],
+            },
+          ],
         },
       },
       {
@@ -65,6 +90,27 @@ export class ReportService extends BaseApiService<ReportModel> {
           reports: { $push: '$$ROOT' },
         },
       },
+      {
+        $lookup: {
+          from: StatusCommentConstant.MODEL_NAME,
+          localField: '_id',
+          foreignField: 'user',
+          as: 'status',
+        },
+      },
+      {
+        $match: {
+          $or: [
+            { 'status.0': { $exists: false } },
+            {
+              $and: [
+                { 'status.0.isBanned': false },
+                { 'status.0.endTime': { $lt: new Date().toISOString() } },
+              ],
+            },
+          ],
+        },
+      },
     ]);
     return record.length;
   }
@@ -81,7 +127,7 @@ export class ReportService extends BaseApiService<ReportModel> {
       {
         $lookup: {
           from: UserConstant.MODEL_NAME,
-          localField: '_id',
+          localField: 'createdBy',
           foreignField: '_id',
           as: 'createdBy',
           pipeline: [
@@ -92,6 +138,10 @@ export class ReportService extends BaseApiService<ReportModel> {
             },
           ],
         },
+      },
+
+      {
+        $unwind: '$createdBy',
       },
 
       {
