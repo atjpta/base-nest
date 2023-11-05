@@ -59,4 +59,27 @@ export class StatusCommentService extends BaseApiService<StatusCommentModel> {
     });
     return records.length;
   }
+
+  public async check(id: string) {
+    const records = await this._model.findOne({
+      _id: this._getID(id),
+      $or: [
+        { isBanned: true },
+        {
+          endTime: {
+            $gt: new Date().toISOString(),
+          },
+        },
+      ],
+    });
+    if (records) {
+      return true;
+    }
+    return false;
+  }
+
+  public async findByUser(id: string) {
+    const records = await this._model.findOne({ user: this._getID(id) });
+    return records;
+  }
 }

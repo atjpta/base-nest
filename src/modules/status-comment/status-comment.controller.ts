@@ -51,6 +51,22 @@ export class StatusCommentController {
 
   // ========== API GET ==========
 
+  @Get('user/:id')
+  @ApiOperation({
+    summary: `--- find ${StatusCommentConstant.MODEL_NAME} by user  ---`,
+  })
+  public async findByUser(
+    @Param('id', ValidateMongoId) id: string,
+  ): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.findByUser(id);
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: StatusCommentConstant.MODEL_NAME,
+      data: records,
+    });
+  }
+
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Get('warning')
   @ApiOperation({
     summary: `--- find all warning ${StatusCommentConstant.MODEL_NAME}  ---`,
@@ -70,6 +86,7 @@ export class StatusCommentController {
     });
   }
 
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
   @Get('banned')
   @ApiOperation({
     summary: `--- find all banned ${StatusCommentConstant.MODEL_NAME}  ---`,
@@ -100,8 +117,6 @@ export class StatusCommentController {
     @Param('id', ValidateMongoId) id: string,
     @Body() body: UpdateStatusCommentDto,
   ): Promise<IHttpSuccess | HttpException> {
-    console.log(body.day);
-
     if (body.day > 0 || body.day == -99) {
       const endTime = new Date();
       endTime.setDate(endTime.getDate() + body.day);

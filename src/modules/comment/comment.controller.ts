@@ -24,11 +24,15 @@ import { CommentConstant } from './constant/comment.constant';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { GetUserId } from '../auth/decorators/user.decorator';
+import { StatusCommentService } from '../status-comment/status-comment.service';
 @ApiBearerAuth()
 @ApiTags(CommentConstant.SWAGGER_TAG)
 @Controller({ path: CommentConstant.API_PREFIX })
 export class CommentController {
-  constructor(private readonly _modelService: CommentService) {}
+  constructor(
+    private readonly _modelService: CommentService,
+    private readonly _statusCommentService: StatusCommentService,
+  ) {}
 
   // ========== API POST ==========
 
@@ -40,6 +44,13 @@ export class CommentController {
     @Body() body: CreateCommentDto,
     @GetUserId() id: string,
   ): Promise<IHttpSuccess | HttpException> {
+    if (this._statusCommentService.check(id)) {
+      return BaseResponse.success({
+        statusCode: BaseHttpStatus.NOT_ACCEPT,
+        object: CommentConstant.MODEL_NAME,
+        data: {},
+      });
+    }
     body['createdBy'] = id;
     const records = await this._modelService.create(body);
     return BaseResponse.success({
