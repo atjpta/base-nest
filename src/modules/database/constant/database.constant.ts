@@ -14,6 +14,7 @@ import { UserConstant } from 'src/modules/user/constant/user.constant';
 import { PlaylistConstant } from 'src/modules/playlist/constant/playlist.constant';
 import { NewsConstant } from 'src/modules/news/constant/news.constant';
 import { StatusCommentConstant } from 'src/modules/status-comment/constant/status-comment.constant';
+import { NotificationConstant } from 'src/modules/notification/constant/notification.constant';
 
 export class DatabasesConstant {
   static SWAGGER_TAG = `database`;
@@ -35,5 +36,6 @@ export class DatabasesConstant {
     NewsConstant.MODEL_NAME,
     ReportConstant.MODEL_NAME,
     StatusCommentConstant.MODEL_NAME,
+    NotificationConstant.MODEL_NAME,
   ];
 }
