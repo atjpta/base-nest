@@ -1,0 +1,27 @@
+lấy ipv4 để chack tự động update view ---- ok
+
+viết UI cho thống kê
+
+trang admin thì khi ấn vào 1 bài thì sẽ hiện cái modal lên thể hiện số lượt nghe trong tháng/năm
+trang admin và trang user có thêm cái thông kê (bảng xếp hạng) top 10 bài nghe nhiều nhất trong ngày/tháng/năm
+
+
+
+// trang dashboard 
+khi ấn vào thì sẽ qua trang tương ứng
+tổng bài hát
+tổng lượt nghe
+tống số ca sĩ
+tổng thể loại
+tổng quốc gia
+tổng user
+
+
+
+// viết api phân quyền
+
+tạo 1 bảng là danh sách quyền
+
+update thẳng vào thông tin user là cái mảng quyền luôn
+
+dựa vào đó mà bên fe check, khỏi cần làm bên be cho khỏe

@@ -4,12 +4,14 @@ import { Model } from 'mongoose';
 import { BaseApiService } from 'src/base/api-service';
 import { MusicConstant } from './constant/music.constant';
 import { MusicModel } from './schema/music.schema';
+import { ViewDetailService } from '../view-detail/view-detail.service';
 
 @Injectable()
 export class MusicService extends BaseApiService<MusicModel> {
   constructor(
     @InjectModel(MusicConstant.MODEL_NAME)
     readonly _model: Model<MusicModel>,
+    readonly _viewDetailService: ViewDetailService,
   ) {
     super(_model);
   }
@@ -95,5 +97,26 @@ export class MusicService extends BaseApiService<MusicModel> {
   public async findAllByModelCount(type: string, id: string) {
     const records = await this._model.find({ [type]: { $gte: id } });
     return records.length;
+  }
+
+  public async updateView(music_id: string) {
+    const records = await this._model.findOneAndUpdate(
+      { _id: this._getID(music_id) },
+      {
+        $inc: { view: 1 },
+      },
+      {
+        new: true,
+      },
+    );
+    await this._viewDetailService.createOrUpdate(music_id);
+    return records;
+  }
+
+  public async findByFilename(filename: string) {
+    const record = await this._model.findOne({
+      name_origin: filename,
+    });
+    return record;
   }
 }

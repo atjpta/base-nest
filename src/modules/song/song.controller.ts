@@ -7,6 +7,7 @@ import {
   Post,
   Res,
   Delete,
+  Ip,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -65,14 +66,27 @@ export class SongController {
   // ========== API GET ==========
 
   @IsPublic()
+  @Get('ip')
+  @ApiOperation({ summary: `--- get my ip ---` })
+  async myIp(@Ip() ip: string): Promise<IHttpSuccess> {
+    return BaseResponse.success({
+      object: SongConstant.BUCKETS,
+      statusCode: BaseHttpStatus.NO_FOUND,
+      data: ip,
+    });
+  }
+
+  @IsPublic()
   @Get(':filename')
   @ApiOperation({ summary: `--- get ${SongConstant.BUCKETS} in MongoDB ---` })
   async getFilesInfo(
     @Param('filename') filename: string,
     @Res() res: Response,
+    @Ip() ip: string,
   ): Promise<IHttpSuccess> {
     const record = await this._modelService.findOneInfoFile(filename);
     if (record) {
+      await this._modelService.updateView(filename, ip);
       const recordStream = await this._modelService.downloadFileByName(
         filename,
       );

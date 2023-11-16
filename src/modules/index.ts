@@ -24,6 +24,7 @@ import { NewsModule } from './news/news.module';
 import { StatusCommentModule } from './status-comment/status-comment.module';
 import { ReportModule } from './report/report.module';
 import { NotificationModule } from './notification/notification.module';
+import { ViewDetailModule } from './view-detail/view-detail.module';
 
 export const APP_MODULES = [
   DatabaseModule,
@@ -48,6 +49,7 @@ export const APP_MODULES = [
   StatusCommentModule,
   ReportModule,
   NotificationModule,
+  ViewDetailModule,
   // SocketManagerModule,
 ];
 

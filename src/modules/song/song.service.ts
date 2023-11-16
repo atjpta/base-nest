@@ -4,13 +4,19 @@ import mongoose, { Connection } from 'mongoose';
 import { GridFSBucket, GridFSFile, GridFSBucketReadStream } from 'mongodb';
 import { SongConstant } from './constant/song.constant';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { MusicService } from '../music/music.service';
 @Injectable()
 export class SongService {
   private bucket: GridFSBucket;
-  constructor(@InjectConnection() private connection: Connection) {
+  private listView: Set<string>;
+  constructor(
+    @InjectConnection() private connection: Connection,
+    readonly _musicService: MusicService,
+  ) {
     this.bucket = new GridFSBucket(this.connection.db, {
       bucketName: SongConstant.BUCKETS,
     });
+    this.listView = new Set<string>();
   }
 
   public async downloadFileByName(
@@ -74,5 +80,23 @@ export class SongService {
     } else {
       return;
     }
+  }
+
+  public async updateView(filename: string, ip: string) {
+    const key = filename + '----' + ip;
+    if (this.listView.has(key)) {
+      return;
+    } else {
+      this.listView.add(key);
+      const music = await this._musicService.findByFilename(filename);
+      await this._musicService.updateView(music._id);
+      setTimeout(
+        () => {
+          this.listView.delete(key);
+        },
+        2 * 60 * 1000,
+      );
+    }
+    return;
   }
 }

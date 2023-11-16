@@ -3,6 +3,7 @@ import {
   NestModule,
   MiddlewareConsumer,
   RequestMethod,
+  forwardRef,
 } from '@nestjs/common';
 import { SongController } from './song.controller';
 import { SongService } from './song.service';
@@ -10,8 +11,10 @@ import {
   uploadArraySongMiddleware,
   uploadOneSongMiddleware,
 } from './middleware/song.middleware';
+import { MusicModule } from '../music/music.module';
 
 @Module({
+  imports: [forwardRef(() => MusicModule)],
   controllers: [SongController],
   providers: [SongService],
   exports: [SongService],

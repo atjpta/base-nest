@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  RequestMethod,
+  forwardRef,
+} from '@nestjs/common';
 import { MongooseModule, SchemaFactory } from '@nestjs/mongoose';
 import { MusicController } from './music.controller';
 import { MusicService } from './music.service';
@@ -6,10 +11,12 @@ import { MusicConstant } from './constant/music.constant';
 import { MusicModel } from './schema/music.schema';
 import { uploadMusicMiddleware } from './middleware/music.middleware';
 import { SongModule } from '../song/song.module';
+import { ViewDetailModule } from '../view-detail/view-detail.module';
 
 @Module({
   imports: [
-    SongModule,
+    ViewDetailModule,
+    forwardRef(() => SongModule),
     MongooseModule.forFeature([
       {
         name: MusicConstant.MODEL_NAME,

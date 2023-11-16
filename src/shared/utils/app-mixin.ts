@@ -3,6 +3,14 @@
  */
 
 export class AppMixin {
+  static getDayMonthYear(date: string = '') {
+    const newDate = date ? new Date(date) : new Date();
+    const day = newDate.getDate();
+    const month = newDate.getMonth() + 1;
+    const year = newDate.getFullYear();
+    return { day, month, year };
+  }
+
   static parseArray = (str: any) => {
     if (str) {
       return str.toString().split(',');
