@@ -14,6 +14,8 @@ import { ImageService } from '../image/image.service';
 import { SongService } from '../song/song.service';
 import { ImageConstant } from '../image/constant/image.constant';
 import { SongConstant } from '../song/constant/song.constant';
+import { PermissionService } from '../permission/permission.service';
+import { PermissionConstant } from '../permission/constant/permission.constant';
 @Injectable()
 export class DatabaseService {
   constructor(
@@ -23,6 +25,7 @@ export class DatabaseService {
     readonly fileService: FileService,
     readonly imageService: ImageService,
     readonly songService: SongService,
+    readonly permissionService: PermissionService,
   ) {}
 
   public async dropDatabase(): Promise<ResDelete[]> {
@@ -110,6 +113,9 @@ export class DatabaseService {
       [FileConstant.FOLDER]: await this.fileService.initFolderUpload(),
       [RoleConstant.MODEL_NAME]: await this.roleService.initCollection(),
       [UserConstant.MODEL_NAME]: await this.userService.initCollection(),
+      [UserConstant.MODEL_NAME]: await this.userService.initCollection(),
+      [PermissionConstant.MODEL_NAME]:
+        await this.permissionService.initCollection(),
     };
     return db;
   }

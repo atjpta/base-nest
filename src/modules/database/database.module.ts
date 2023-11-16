@@ -9,6 +9,7 @@ import { UserModule } from '../user/user.module';
 import { FileModule } from '../file/file.module';
 import { ImageModule } from '../image/image.module';
 import { SongModule } from '../song/song.module';
+import { PermissionModule } from '../permission/permission.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SongModule } from '../song/song.module';
     UserModule,
     ImageModule,
     SongModule,
+    PermissionModule,
     MongooseModule.forRootAsync({
       imports: [],
       useFactory: async () => {
