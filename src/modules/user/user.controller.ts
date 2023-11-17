@@ -101,6 +101,18 @@ export class UserController {
     });
   }
 
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Get('total')
+  @ApiOperation({ summary: `--- find total ${UserConstant.MODEL_NAME} ---` })
+  public async findTotal(): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getTotalRow();
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: UserConstant.MODEL_NAME,
+      data: { total: records },
+    });
+  }
+
   @IsPublic()
   @Get('check-code')
   @ApiOperation({

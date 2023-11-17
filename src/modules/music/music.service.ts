@@ -119,4 +119,14 @@ export class MusicService extends BaseApiService<MusicModel> {
     });
     return record;
   }
+
+  public async getTotalView() {
+    const records = await this._model.find();
+
+    let sum = 0;
+    records.forEach((e) => {
+      sum += e.view;
+    });
+    return sum;
+  }
 }

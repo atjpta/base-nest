@@ -113,6 +113,36 @@ export class MusicController {
     });
   }
 
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Get('total')
+  @ApiOperation({
+    summary: `--- find total ${MusicConstant.MODEL_NAME}  ---`,
+  })
+  public async findTotal(): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getTotalRow();
+
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: MusicConstant.MODEL_NAME,
+      data: { total: records },
+    });
+  }
+
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Get('total-view')
+  @ApiOperation({
+    summary: `--- find total ${MusicConstant.MODEL_NAME}  ---`,
+  })
+  public async findTotalView(): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getTotalView();
+
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: MusicConstant.MODEL_NAME,
+      data: records ?? 0,
+    });
+  }
+
   @IsPublic()
   @Get('model/:type/:id')
   @ApiOperation({

@@ -85,6 +85,20 @@ export class CountryController {
   }
 
   @IsPublic()
+  @Get('total')
+  @ApiOperation({
+    summary: `--- find total ${CountryConstant.MODEL_NAME}  ---`,
+  })
+  public async findTotal(): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getTotalRow();
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: CountryConstant.MODEL_NAME,
+      data: { total: records },
+    });
+  }
+
+  @IsPublic()
   @Get(':id')
   @ApiOperation({
     summary: `--- find one ${CountryConstant.MODEL_NAME} by id ---`,
