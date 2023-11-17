@@ -23,6 +23,6 @@ trang admin dashboard gọi api tương ứng để call lấy data
 
 tạo 1 bảng là danh sách quyền ---- ok
 
-update thẳng vào thông tin user là cái mảng quyền luôn
+update thẳng vào thông tin user là cái mảng quyền luôn ---- đã chỉnh bên api update role
 
 dựa vào đó mà bên fe check, khỏi cần làm bên be cho khỏe

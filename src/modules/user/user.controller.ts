@@ -303,6 +303,7 @@ export class UserController {
     if (canUpdate) {
       const records = await this._modelService.update(id, {
         role: this._modelService._getID(body.role),
+        permissions: body.permissions,
       });
       return BaseResponse.success({
         statusCode: BaseHttpStatus.OK,

@@ -1,6 +1,6 @@
 import { PickType } from '@nestjs/mapped-types';
 import { CreateUserDto } from './create-user.dto';
-import { IsMongoId, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsMongoId, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { CreateFileMongoDBDto } from 'src/base/create-dto';
 
@@ -43,4 +43,12 @@ export class UpdateRoleUserDto {
     description: 'update role user',
   })
   role: string;
+
+  @IsArray()
+  @IsOptional()
+  @ApiProperty({
+    required: false,
+    description: 'id permissions',
+  })
+  permissions?: string[] = [];
 }

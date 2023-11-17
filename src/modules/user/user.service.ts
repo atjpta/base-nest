@@ -39,13 +39,16 @@ export class UserService extends BaseApiService<UserModel> {
     if (AppConfig.getInstance().app.product == 'dev') {
       user.avatar = `${AppConfig.urlServer}/${FileConstant.API_PREFIX}/eye Ai.jpg`;
     }
-    return (await this._model.create(user)).populate('role', 'name');
+    return (await this._model.create(user)).populate(
+      'role permissions',
+      'name',
+    );
   }
 
   public async findByUserName(username: string): Promise<UserModel> {
     return await this._model
       .findOne({ username: username })
-      .populate('role', 'name');
+      .populate('role permissions', 'name');
   }
 
   public async initCollection(): Promise<UserModel[]> {
@@ -97,7 +100,7 @@ export class UserService extends BaseApiService<UserModel> {
   public async getInfo(id: string): Promise<UserModel> {
     const records = await this._model
       .findById(this._getID(id))
-      .populate('role')
+      .populate('role permissions')
       .select('-password');
     return records;
   }
@@ -109,7 +112,7 @@ export class UserService extends BaseApiService<UserModel> {
       .findByIdAndUpdate(_id, data, {
         new: true,
       })
-      .populate('role')
+      .populate('role permissions')
       .select('-password');
 
     return records;
@@ -125,7 +128,7 @@ export class UserService extends BaseApiService<UserModel> {
 
     const records = await this._model
       .find(condition)
-      .populate('role')
+      .populate('role permissions')
       .sort('-createdAt')
       .limit(limit)
       .skip(skipIndex)
