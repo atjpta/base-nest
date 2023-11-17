@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import {
   Body,
   Controller,
@@ -8,6 +8,7 @@ import {
   Res,
   Delete,
   Ip,
+  Req,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -68,11 +69,11 @@ export class SongController {
   @IsPublic()
   @Get('ip')
   @ApiOperation({ summary: `--- get my ip ---` })
-  async myIp(@Ip() ip: string): Promise<IHttpSuccess> {
+  async myIp(@Ip() ip: string, @Req() request: Request): Promise<IHttpSuccess> {
     return BaseResponse.success({
       object: SongConstant.BUCKETS,
       statusCode: BaseHttpStatus.NO_FOUND,
-      data: ip,
+      data: [ip, request.ip, request.socket.remoteAddress],
     });
   }
 
