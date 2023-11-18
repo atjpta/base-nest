@@ -6,19 +6,6 @@ trang admin thì khi ấn vào 1 bài thì sẽ hiện cái modal lên thể hi�
 trang admin và trang user có thêm cái thông kê (bảng xếp hạng) top 10 bài nghe nhiều nhất trong ngày/tháng/năm
 
 
-
-// trang dashboard 
-khi ấn vào thì sẽ qua trang tương ứng
-tổng bài hát ---- ok
-tổng lượt nghe ---- ok
-tống số ca sĩ ---- ok
-tổng thể loại ---- ok
-tổng quốc gia ---- ok
-tổng user ---- ok
-
-trang admin dashboard gọi api tương ứng để call lấy data
-
-
 // viết api phân quyền
 
 tạo 1 bảng là danh sách quyền ---- ok

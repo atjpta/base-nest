@@ -44,7 +44,7 @@ export class CommentController {
     @Body() body: CreateCommentDto,
     @GetUserId() id: string,
   ): Promise<IHttpSuccess | HttpException> {
-    if (this._statusCommentService.check(id)) {
+    if (await this._statusCommentService.check(id)) {
       return BaseResponse.success({
         statusCode: BaseHttpStatus.NOT_ACCEPT,
         object: CommentConstant.MODEL_NAME,
@@ -79,6 +79,20 @@ export class CommentController {
       statusCode: BaseHttpStatus.OK,
       object: CommentConstant.MODEL_NAME,
       data: { list: records, total: total },
+    });
+  }
+
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Get('total')
+  @ApiOperation({
+    summary: `--- find total ${CommentConstant.MODEL_NAME}  ---`,
+  })
+  public async findTotal(): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getTotalRow();
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: CommentConstant.MODEL_NAME,
+      data: { total: records },
     });
   }
 

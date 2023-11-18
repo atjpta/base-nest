@@ -63,6 +63,21 @@ export class FavoriteController {
     });
   }
 
+  @HasRoles(RoleConstant.LIST_ROLES.Admin)
+  @Get(`total`)
+  @ApiOperation({
+    summary: `--- find total ${FavoriteConstant.MODEL_NAME}  ---`,
+  })
+  public async findTotal(): Promise<IHttpSuccess | HttpException> {
+    const records = await this._modelService.getTotalRow();
+
+    return BaseResponse.success({
+      statusCode: BaseHttpStatus.OK,
+      object: FavoriteConstant.MODEL_NAME,
+      data: { total: records },
+    });
+  }
+
   @Get(`model/:id`)
   @ApiOperation({
     summary: `--- find one ${FavoriteConstant.MODEL_NAME}  ---`,

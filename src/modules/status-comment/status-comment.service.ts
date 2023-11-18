@@ -62,7 +62,7 @@ export class StatusCommentService extends BaseApiService<StatusCommentModel> {
 
   public async check(id: string) {
     const records = await this._model.findOne({
-      _id: this._getID(id),
+      user: this._getID(id),
       $or: [
         { isBanned: true },
         {
@@ -72,6 +72,7 @@ export class StatusCommentService extends BaseApiService<StatusCommentModel> {
         },
       ],
     });
+
     if (records) {
       return true;
     }

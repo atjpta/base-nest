@@ -139,7 +139,7 @@ export class MusicController {
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: MusicConstant.MODEL_NAME,
-      data: records ?? 0,
+      data: { total: records },
     });
   }
 
