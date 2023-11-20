@@ -4,12 +4,3 @@ viết UI cho thống kê
 
 trang admin thì khi ấn vào 1 bài thì sẽ hiện cái modal lên thể hiện số lượt nghe trong tháng/năm
 trang admin và trang user có thêm cái thông kê (bảng xếp hạng) top 10 bài nghe nhiều nhất trong ngày/tháng/năm
-
-
-// viết api phân quyền
-
-tạo 1 bảng là danh sách quyền ---- ok
-
-update thẳng vào thông tin user là cái mảng quyền luôn ---- đã chỉnh bên api update role
-
-dựa vào đó mà bên fe check, khỏi cần làm bên be cho khỏe

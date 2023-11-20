@@ -73,6 +73,7 @@ export class AuthService {
       role: user.role.name,
       accessToken: accessToken,
       refreshToken: refreshToken,
+      permissions: user.permissions,
     };
   }
 }

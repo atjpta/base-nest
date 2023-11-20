@@ -48,7 +48,7 @@ export class PermissionController {
   // ========== API GET ==========
 
   @HasRoles(RoleConstant.LIST_ROLES.Admin)
-  @Get('user')
+  @Get('')
   @ApiOperation({
     summary: `--- find all ${PermissionConstant.MODEL_NAME}  ---`,
   })
