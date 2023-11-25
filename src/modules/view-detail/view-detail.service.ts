@@ -11,6 +11,9 @@ import {
   QueryByYearAndMusicDto,
   QueryTopByDateDto,
 } from './dto/query-view-detail.dto';
+import { SingerConstant } from '../singer/constant/singer.constant';
+import { GenreConstant } from '../genre/constant/genre.constant';
+import { CountryConstant } from '../country/constant/country.constant';
 
 @Injectable()
 export class ViewDetailService extends BaseApiService<ViewDetailModel> {
@@ -63,6 +66,32 @@ export class ViewDetailService extends BaseApiService<ViewDetailModel> {
           localField: '_id',
           foreignField: '_id',
           as: 'music',
+          pipeline: [
+            {
+              $lookup: {
+                from: SingerConstant.MODEL_NAME,
+                localField: 'singer',
+                foreignField: '_id',
+                as: 'singer',
+              },
+            },
+            {
+              $lookup: {
+                from: GenreConstant.MODEL_NAME,
+                localField: 'genre',
+                foreignField: '_id',
+                as: 'genre',
+              },
+            },
+            {
+              $lookup: {
+                from: CountryConstant.MODEL_NAME,
+                localField: 'country',
+                foreignField: '_id',
+                as: 'country',
+              },
+            },
+          ],
         },
       },
       {
@@ -70,6 +99,9 @@ export class ViewDetailService extends BaseApiService<ViewDetailModel> {
       },
       {
         $limit: top,
+      },
+      {
+        $sort: { view: -1 },
       },
     ]);
     return record;
@@ -79,7 +111,12 @@ export class ViewDetailService extends BaseApiService<ViewDetailModel> {
     const record = await this._model.find(query).sort('day');
     const music = await this._model
       .findOne({ music: this._getID(query.music) })
-      .populate('music');
+      .populate({
+        path: 'music',
+        populate: {
+          path: 'singer genre country',
+        },
+      });
     return { list: record, music: music.music };
   }
 
@@ -116,6 +153,32 @@ export class ViewDetailService extends BaseApiService<ViewDetailModel> {
           localField: 'music',
           foreignField: '_id',
           as: 'music',
+          pipeline: [
+            {
+              $lookup: {
+                from: SingerConstant.MODEL_NAME,
+                localField: 'singer',
+                foreignField: '_id',
+                as: 'singer',
+              },
+            },
+            {
+              $lookup: {
+                from: GenreConstant.MODEL_NAME,
+                localField: 'genre',
+                foreignField: '_id',
+                as: 'genre',
+              },
+            },
+            {
+              $lookup: {
+                from: CountryConstant.MODEL_NAME,
+                localField: 'country',
+                foreignField: '_id',
+                as: 'country',
+              },
+            },
+          ],
         },
       },
       {

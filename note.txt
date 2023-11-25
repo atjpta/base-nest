@@ -1,6 +1,0 @@
-lấy ipv4 để chack tự động update view ---- ok
-
-viết UI cho thống kê
-
-trang admin thì khi ấn vào 1 bài thì sẽ hiện cái modal lên thể hiện số lượt nghe trong tháng/năm
-trang admin và trang user có thêm cái thông kê (bảng xếp hạng) top 10 bài nghe nhiều nhất trong ngày/tháng/năm
