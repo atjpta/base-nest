@@ -9,9 +9,7 @@ import { IHttpSuccess, BaseResponse } from 'src/base/response';
 import { UserService } from '../user/user.service';
 import { UserConstant } from '../user/constant/user.constant';
 import { IsPublic } from './decorators/public.decorator';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import { BullConstant } from '../bull/constant/bull.constant';
+import { MailerService } from '@nestjs-modules/mailer';
 @IsPublic()
 @ApiTags(AuthConstant.SWAGGER_TAG)
 @Controller({ path: AuthConstant.API_PREFIX })
@@ -19,8 +17,9 @@ export class AuthController {
   constructor(
     private readonly _modelService: AuthService,
     private readonly _userService: UserService,
-    @InjectQueue(BullConstant.JOB_BULL.sendEmail)
-    private readonly sendMail: Queue,
+    // @InjectQueue(BullConstant.JOB_BULL.sendEmail)
+    // private readonly sendMail: Queue,
+    private readonly _mailerService: MailerService,
   ) {}
 
   // ========== API POST ==========
@@ -50,17 +49,18 @@ export class AuthController {
     const records = await this._modelService.login(user);
     // await this.sendMail.add(
     //   BullConstant.TASK_BULL.registerMail,
-    //   {
-    //     to: records.email,
-    //     from: 'noreply@nestjs.com',
-    //     subject: 'welcome to website',
-    //     template: 'welcome',
-    //     context: {
-    //       name: records.fullName,
-    //     },
+    // {
+    //   to: records.email,
+    //   from: 'noreply@nestjs.com',
+    //   subject: 'welcome to website',
+    //   template: 'welcome',
+    //   context: {
+    //     name: records.fullName,
     //   },
+    // },
     //   { removeOnComplete: true },
     // );
+
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: 'login',
@@ -76,19 +76,29 @@ export class AuthController {
     //create user
     const records = await this._modelService.register(body);
 
-    await this.sendMail.add(
-      BullConstant.TASK_BULL.registerMail,
-      {
-        to: records.email,
-        from: 'noreply@nestjs.com',
-        subject: 'welcome to website',
-        template: 'welcome',
-        context: {
-          name: records.fullName,
-        },
+    // await this.sendMail.add(
+    //   BullConstant.TASK_BULL.registerMail,
+    //   {
+    //     to: records.email,
+    //     from: 'noreply@nestjs.com',
+    //     subject: 'welcome to website',
+    //     template: 'welcome',
+    //     context: {
+    //       name: records.fullName,
+    //     },
+    //   },
+    //   { removeOnComplete: true },
+    // );
+
+    await this._mailerService.sendMail({
+      to: records.email,
+      from: 'noreply@nestjs.com',
+      subject: 'welcome to website',
+      template: 'welcome',
+      context: {
+        name: records.fullName,
       },
-      { removeOnComplete: true },
-    );
+    });
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: 'register',

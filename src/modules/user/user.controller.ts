@@ -33,15 +33,13 @@ import { GetUserId, GetUserRole } from '../auth/decorators/user.decorator';
 import { HasRoles } from '../auth/decorators/role.decorator';
 import { IsPublic } from '../auth/decorators/public.decorator';
 import { ValidateMongoId } from 'src/shared/pipes/validate.pipe';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import { BullConstant } from '../bull/constant/bull.constant';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Request } from 'express';
 import { AppConfig } from 'src/configs/app.config';
 import { ImageConstant } from '../image/constant/image.constant';
 import { QueryFindAllUser } from './dto/query-user.dto';
+import { MailerService } from '@nestjs-modules/mailer';
 @ApiBearerAuth()
 @ApiTags(UserConstant.SWAGGER_TAG)
 @Controller({ path: UserConstant.API_PREFIX })
@@ -49,8 +47,8 @@ export class UserController {
   constructor(
     private readonly _modelService: UserService,
     private readonly _roleService: RoleService,
-    @InjectQueue(BullConstant.JOB_BULL.sendEmail)
-    private readonly sendMail: Queue,
+    private readonly _mailerService: MailerService,
+    // @InjectQueue(BullConstant.JOB_BULL.sendEmail)
     @Inject(CACHE_MANAGER) public readonly cacheManager: Cache,
   ) {}
 
@@ -144,27 +142,42 @@ export class UserController {
     const records = await this._modelService.findByUserName(username);
 
     if (records) {
-      const code1 = ~~(Math.random() * 10);
+      let code1 = ~~(Math.random() * 10);
       const code2 = ~~(Math.random() * 10);
       const code3 = ~~(Math.random() * 10);
       const code4 = ~~(Math.random() * 10);
 
+      if (code1 == 0) {
+        code1 = 1;
+      }
+
       const code = `${code1}${code2}${code3}${code4}`;
       await this.cacheManager.set(code, true, { ttl: 125 } as any);
-      await this.sendMail.add(
-        BullConstant.TASK_BULL.registerMail,
-        {
-          to: records.email,
-          from: 'noreply@nestjs.com',
-          subject: 'code re password',
-          template: 'rePassword',
-          context: {
-            code: code,
-          },
+      // await this.sendMail.add(
+      //   BullConstant.TASK_BULL.registerMail,
+      //   {
+      //     to: records.email,
+      //     from: 'noreply@nestjs.com',
+      //     subject: 'code re password',
+      //     template: 'rePassword',
+      //     context: {
+      //       code: code,
+      //     },
+      //   },
+      //   { removeOnComplete: true },
+      // );
+
+      await this._mailerService.sendMail({
+        to: records.email,
+        from: 'noreply@nestjs.com',
+        subject: 'code re password',
+        template: 'rePassword',
+        context: {
+          code: code,
         },
-        { removeOnComplete: true },
-      );
+      });
     }
+
     return BaseResponse.success({
       statusCode: BaseHttpStatus.OK,
       object: UserConstant.MODEL_NAME,
